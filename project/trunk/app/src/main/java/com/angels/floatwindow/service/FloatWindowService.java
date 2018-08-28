@@ -7,33 +7,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.angels.floatwindow.R;
-import com.angels.floatwindow.actor.Animal;
-import com.angels.floatwindow.widget.MyFloatView;
+import com.angels.floatwindow.actor.Rabbit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 /**
  * Created by chencg on 2018/8/24.
  */
 
 public class FloatWindowService extends Service {
+    public static int screenHeight;
+    public static int screenWeight;
+
+    /**菜单*/
+    private View menuView;
+    /**小兔子*/
+    private Rabbit rabbit;
 
     /**
      * 用于在线程中创建或移除悬浮窗。
@@ -48,6 +50,11 @@ public class FloatWindowService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //2、通过Resources获取
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        screenHeight = dm.heightPixels;
+        screenWeight = dm.widthPixels;
         addWindow();
     }
 
@@ -55,7 +62,6 @@ public class FloatWindowService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        addWindow();
         return super.onStartCommand(intent, flags, startId);
-
     }
 
     @Override
@@ -119,29 +125,24 @@ public class FloatWindowService extends Service {
 		 */
         wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         // 以屏幕左上角为原点，设置x、y初始值
-        wmParams.x = 300;
-        wmParams.y = 300;
+//        wmParams.x = 300;
+//        wmParams.y = 300;
+//        MyFloatView view = new MyFloatView(this,wm,wmParams);
+//        wm.addView(view, wmParams);
+        menuView = LayoutInflater.from(this).inflate(R.layout.float_menu, null);
+        wmParams.y = screenHeight - menuView.getHeight()*2;
+        wm.addView(menuView, wmParams);
+        menuView.setVisibility(View.INVISIBLE);
 
-        MyFloatView view = new MyFloatView(this,wm,wmParams);
-        wm.addView(view, wmParams);
+        rabbit = new Rabbit(this,wmParams);
+        rabbit.setImageResource(R.drawable.anim_rabbit_walk_left);
+        rabbit.start();
+        wmParams.x = screenWeight/2;
+        wmParams.y = screenHeight/2;
+        rabbit.setXY(wmParams.x,wmParams.y);
+        wm.addView(rabbit, wmParams);
 
-        wmParams.x = 500;
-        wmParams.y = 500;
-        Button button = new Button(this);
-        button.setText("按钮");
 
-        ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.drawable.anim_walk);
-        AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
-        animationDrawable.start();
-
-        wmParams.x = 500;
-        wmParams.y = 800;
-        Animal animal = new Animal(this,wmParams);
-//        animal.setBackgroundColor(Color.parseColor("#545412"));
-        animal.setImageResource(R.drawable.anim_walk);
-        animal.startAnim();
-        wm.addView(animal, wmParams);
     }
 
 }
