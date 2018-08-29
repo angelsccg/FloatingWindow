@@ -11,7 +11,7 @@ import com.angels.floatwindow.R;
 import com.angels.floatwindow.service.FloatWindowService;
 import com.angels.floatwindow.utils.ACLogUtil;
 
-public class Rabbit extends ActorBase {
+public class Pig extends ActorBase {
 
     /**左走*/
     public static final int WALK_LEFT = 1;
@@ -75,13 +75,13 @@ public class Rabbit extends ActorBase {
     /*
      *创建回调接口
      */
-    public interface OnTouchEventRabbitListener {
+    public interface OnTouchEventListener {
         public void onTouchEvent(MotionEvent event);
     }
 
-    private OnTouchEventRabbitListener onTouchEventRabbitListener;
+    private OnTouchEventListener onTouchEventListener;
 
-    public Rabbit(Context context, WindowManager.LayoutParams wmParams) {
+    public Pig(Context context, WindowManager.LayoutParams wmParams) {
         super(context);
         init();
         this.wmParams = wmParams;
@@ -111,8 +111,8 @@ public class Rabbit extends ActorBase {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(onTouchEventRabbitListener != null){
-            onTouchEventRabbitListener.onTouchEvent(event);
+        if(onTouchEventListener != null){
+            onTouchEventListener.onTouchEvent(event);
         }
         // 获取相对屏幕的坐标，即以屏幕左上角为原点
         int x = (int) event.getRawX();
@@ -171,27 +171,27 @@ public class Rabbit extends ActorBase {
     }
     /**初始化左走*/
     private void initLeftWalk(){
-        setImageResource(R.drawable.anim_rabbit_walk_left);
+        setImageResource(R.drawable.anim_pig_a1_walk_left);
         startAnim();
         changeState(WALK_LEFT);
     }
 
     /**初始化右走*/
     private void initRightWalk(){
-        setImageResource(R.drawable.anim_rabbit_walk_right);
+        setImageResource(R.drawable.anim_pig_a1_walk_right);
         startAnim();
         changeState(WALK_RIGHT);
     }
     /**初始化下走*/
     private void initDownWalk(){
-        setImageResource(R.drawable.anim_rabbit_walk_down);
+        setImageResource(R.drawable.anim_pig_a1_walk_down);
         startAnim();
         changeState(WALK_DOWN);
     }
 
     /**初始化上走*/
     private void initUpWalk(){
-        setImageResource(R.drawable.anim_rabbit_walk_up);
+        setImageResource(R.drawable.anim_pig_a1_walk_up);
         startAnim();
         changeState(WALK_UP);
     }
@@ -210,13 +210,13 @@ public class Rabbit extends ActorBase {
     }
     /**初始化左吃*/
     private void initLeftEat(){
-        setImageResource(R.drawable.anim_rabbit_eat_left);
+        setImageResource(R.drawable.anim_pig_a1_eat_left);
         startAnim();
         changeState(EAT_LEFT);
     }
     /**初始化右吃*/
     private void initRightEat(){
-        setImageResource(R.drawable.anim_rabbit_eat_right);
+        setImageResource(R.drawable.anim_pig_a1_eat_right);
         startAnim();
         changeState(EAT_RIGHT);
     }
@@ -270,9 +270,5 @@ public class Rabbit extends ActorBase {
 
     public void setState(int state) {
         this.state = state;
-    }
-
-    public void setOnTouchEventRabbitListener(OnTouchEventRabbitListener onTouchEventRabbitListener) {
-        this.onTouchEventRabbitListener = onTouchEventRabbitListener;
     }
 }

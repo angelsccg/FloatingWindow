@@ -3,16 +3,16 @@
     android:oneshot="false">
 
     <item
-        android:drawable="@mipmap/rabbit_down_walk_01"
+        android:drawable="@mipmap/rabbit_walk_down_01"
         android:duration="200" />
     <item
-        android:drawable="@mipmap/rabbit_down_walk_02"
+        android:drawable="@mipmap/rabbit_walk_down_02"
         android:duration="200" />
     <item
-        android:drawable="@mipmap/rabbit_down_walk_03"
+        android:drawable="@mipmap/rabbit_walk_down_03"
         android:duration="200" />
     <item
-        android:drawable="@mipmap/rabbit_down_walk_04"
+        android:drawable="@mipmap/rabbit_walk_down_04"
         android:duration="200" />
 
 </animation-list>
