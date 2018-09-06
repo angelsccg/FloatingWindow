@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         askForPermission();
+
     }
 
     private void initView() {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void askForPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {

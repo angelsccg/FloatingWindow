@@ -3,8 +3,6 @@ package com.angels.floatwindow.service;
 
 import android.app.ActivityManager;
 import android.app.Service;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,22 +12,21 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.Toast;
 
+import com.angels.floatwindow.floatActor.FloatSurfaceView;
 import com.angels.floatwindow.R;
+import com.angels.floatwindow.actor.House;
 import com.angels.floatwindow.actor.Pig;
 import com.angels.floatwindow.actor.Rabbit;
 import com.angels.floatwindow.utils.ACLogUtil;
 import com.angels.floatwindow.utils.ACToast;
+import com.angels.floatwindow.utils.AppUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,17 +38,27 @@ import java.util.List;
 public class FloatWindowService extends Service {
     public static int screenHeight;
     public static int screenWeight;
+    /*状态栏高度*/
+    public static int statusBarHeight;
 
     /**菜单*/
     private View menuView;
     /**菜单*/
     private ImageView iv01,iv02,iv03,iv04;
     /**小兔子*/
-    private Rabbit rabbit;
+    private static Rabbit rabbit;
+    /**房子*/
+    private static House house;
     /**猪a1*/
     private Pig pig;
 
-    /**事件
+    /**容器*/
+    private FloatSurfaceView floatSurfaceView;
+
+    /**
+     *
+     * 事件
+     *
      * 0：无
      * 1：菜单1
      * 2：菜单2
@@ -77,7 +84,15 @@ public class FloatWindowService extends Service {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenHeight = dm.heightPixels;
         screenWeight = dm.widthPixels;
-        addWindow();
+        statusBarHeight = AppUtil.getStatusBarHeight(this);
+//        int result = 0;
+//        int resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+//        if (resourceId > 0) {
+//            result = this.getResources().getDimensionPixelSize(resourceId);
+//        }
+        if(rabbit == null){
+            addWindow();
+        }
     }
 
     @Override
@@ -150,19 +165,24 @@ public class FloatWindowService extends Service {
 		 * | LayoutParams.FLAG_NOT_TOUCHABLE;
 		 */
         wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        // 以屏幕左上角为原点，设置x、y初始值
-//        wmParams.x = 300;
-//        wmParams.y = 300;
-//        MyFloatView view = new MyFloatView(this,wm,wmParams);
-//        wm.addView(view, wmParams);
-        menuView = LayoutInflater.from(this).inflate(R.layout.float_menu, null);
-        iv01 = menuView.findViewById(R.id.iv01);
-        iv02 = menuView.findViewById(R.id.iv02);
-        iv03 = menuView.findViewById(R.id.iv03);
-        iv04 = menuView.findViewById(R.id.iv04);
-        wmParams.y = screenHeight - menuView.getHeight()*2;
-        wm.addView(menuView, wmParams);
-        menuView.setVisibility(View.INVISIBLE);
+
+//        menuView = LayoutInflater.from(this).inflate(R.layout.float_menu, null);
+//        iv01 = menuView.findViewById(R.id.iv01);
+//        iv02 = menuView.findViewById(R.id.iv02);
+//        iv03 = menuView.findViewById(R.id.iv03);
+//        iv04 = menuView.findViewById(R.id.iv04);
+//        wmParams.y = screenHeight - menuView.getHeight()*2;
+//        wm.addView(menuView, wmParams);
+//        menuView.setVisibility(View.INVISIBLE);
+        /*
+        * 房子
+        * */
+        wmParams.x = 20;
+        wmParams.y = 20;
+        house = new House(this,wmParams);
+        house.setVisibility(View.GONE);
+        house.changeState(House.DAYTIME);
+        wm.addView(house, wmParams);
 
         rabbit = new Rabbit(this,wmParams);
         rabbit.setImageResource(R.drawable.anim_rabbit_walk_left);
@@ -171,6 +191,72 @@ public class FloatWindowService extends Service {
         wmParams.y = screenHeight/2;
         rabbit.setXY(wmParams.x,wmParams.y);
         wm.addView(rabbit, wmParams);
+//        rabbit.setOnTouchEventRabbitListener(new Rabbit.OnTouchEventRabbitListener() {
+//            @Override
+//            public void onTouchEvent(MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
+//                        break;
+//                    case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
+//                        menuView.setVisibility(View.VISIBLE);
+//                        iv01.getX();
+//                        int [] loaction = new int[2];
+//                        iv02.getLocationOnScreen(loaction);
+//                        // 获取相对屏幕的坐标，即以屏幕左上角为原点
+//                        int x = (int) event.getRawX();
+//                        int y = (int) event.getRawY();
+//                        ACLogUtil.i("控件位置-->iv02:" + loaction[0] + "--" + loaction[1]);
+//                        ACLogUtil.i("控件位置-->iv01:" + iv02.getWidth() + "--" + iv02.getHeight());
+//                        ACLogUtil.i("控件位置-->xy:" + x + "--" + y);
+//                        if(isRrash(x,y,iv01)){
+//                            selectMenu(iv01);
+//                            eveType = 1;
+//                        }else if(isRrash(x,y,iv02)){
+//                            selectMenu(iv02);
+//                            eveType = 2;
+//                        }else if(isRrash(x,y,iv03)){
+//                            selectMenu(iv03);
+//                            eveType = 3;
+//                        }else if(isRrash(x,y,iv04)){
+//                            selectMenu(iv04);
+//                            eveType = 4;
+//                        }else{
+//                            selectMenu(null);
+//                            eveType = 0;
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP://捕获手指触摸离开动作
+//                        menuView.setVisibility(View.GONE);
+//                        if(eveType != 0){
+//                            switch(eveType){
+//                                case 1:
+//                                    //在需要调用息屏的逻辑调用代码
+//                                    boolean root = AndroidRootUtils.checkDeviceRoot();
+//                                    if(root){
+//                                        AndroidRootUtils.execRootCmd("input keyevent 224");
+//                                    }else {
+//                                        ACToast.showShort(FloatWindowService.this,"没有root权限");
+//                                    }
+//                                    ACLogUtil.i("是否root-->root:" + root);
+//                                    break;
+//                                case 2:
+//                                    ACToast.showShort(FloatWindowService.this,"睡觉啦");
+//                                    break;
+//                                case 3:
+//                                    ACToast.showShort(FloatWindowService.this,"散步啦");
+//                                    break;
+//                                case 4:
+//                                    ACToast.showShort(FloatWindowService.this,"运动啦");
+//                                    break;
+//                            }
+//                            eveType = 0;
+//                        }
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        });
         rabbit.setOnTouchEventRabbitListener(new Rabbit.OnTouchEventRabbitListener() {
             @Override
             public void onTouchEvent(MotionEvent event) {
@@ -178,51 +264,17 @@ public class FloatWindowService extends Service {
                     case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
                         break;
                     case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
-                        menuView.setVisibility(View.VISIBLE);
-                        iv01.getX();
-                        int [] loaction = new int[2];
-                        iv02.getLocationOnScreen(loaction);
+                        house.setVisibility(View.VISIBLE);
+                        break;
+                    case MotionEvent.ACTION_UP://捕获手指触摸离开动作
+                        house.setVisibility(View.GONE);
                         // 获取相对屏幕的坐标，即以屏幕左上角为原点
                         int x = (int) event.getRawX();
                         int y = (int) event.getRawY();
-                        ACLogUtil.i("控件位置-->iv02:" + loaction[0] + "--" + loaction[1]);
-                        ACLogUtil.i("控件位置-->iv01:" + iv02.getWidth() + "--" + iv02.getHeight());
                         ACLogUtil.i("控件位置-->xy:" + x + "--" + y);
-                        if(isRrash(x,y,iv01)){
-                            selectMenu(iv01);
-                            eveType = 1;
-                        }else if(isRrash(x,y,iv02)){
-                            selectMenu(iv02);
-                            eveType = 2;
-                        }else if(isRrash(x,y,iv03)){
-                            selectMenu(iv03);
-                            eveType = 3;
-                        }else if(isRrash(x,y,iv04)){
-                            selectMenu(iv04);
-                            eveType = 4;
-                        }else{
-                            selectMenu(null);
-                            eveType = 0;
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP://捕获手指触摸离开动作
-                        menuView.setVisibility(View.GONE);
-                        if(eveType != 0){
-                            switch(eveType){
-                                case 1:
-                                    ACToast.showShort(FloatWindowService.this,"吃饭啦");
-                                    break;
-                                case 2:
-                                    ACToast.showShort(FloatWindowService.this,"睡觉啦");
-                                    break;
-                                case 3:
-                                    ACToast.showShort(FloatWindowService.this,"散步啦");
-                                    break;
-                                case 4:
-                                    ACToast.showShort(FloatWindowService.this,"运动啦");
-                                    break;
-                            }
-                            eveType = 0;
+                        if(isRrash(x,y,house)){
+                            ACToast.showShort(FloatWindowService.this,"睡觉啦");
+                            house.sleep();
                         }
                         break;
                     default:
@@ -231,10 +283,13 @@ public class FloatWindowService extends Service {
             }
         });
 
-//        pig = new Pig(this,wmParams);
-//        pig.setImageResource(R.drawable.anim_pig_a1_walk_left);
-//        pig.start();
-//        wm.addView(pig, wmParams);
+        /*
+         * 测试
+         * */
+        wmParams.x = 20;
+        wmParams.y = 20;
+        floatSurfaceView = new FloatSurfaceView(this);
+        wm.addView(floatSurfaceView, wmParams);
     }
 
     /**是否碰撞*/

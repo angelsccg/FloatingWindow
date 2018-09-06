@@ -50,6 +50,7 @@ public class Rabbit extends ActorBase {
             }else if(state == WALK_DOWN){
                 walkToDowm();
             }
+            //5秒改一种行走方式
             long nowTime = System.currentTimeMillis();
             long lenTime = (nowTime - changeStateTime)/1000;
             if(lenTime >= 5){
@@ -146,54 +147,51 @@ public class Rabbit extends ActorBase {
     }
 
     /**改变状态*/
-    private void changeState(int state){
+    public void changeState(int state){
         this.state = state;
         changeStateTime = System.currentTimeMillis();
+        switch (state){
+            case WALK_LEFT://左走
+                initLeftWalk();
+                break;
+            case WALK_RIGHT://右走
+                initRightWalk();
+                break;
+            case WALK_UP://上走
+                initUpWalk();
+                break;
+            case WALK_DOWN://下走
+                initDownWalk();
+                break;
+        }
     }
     /**初始化随机走*/
     private void walkToRandom(){
         int ran = (int) (Math.random()*4 + 1);
         ACLogUtil.i("随机状态-->" + ran );
-        switch (ran){
-            case 1://左走
-                initLeftWalk();
-                break;
-            case 2://右走
-                initRightWalk();
-                break;
-            case 3://上走
-                initUpWalk();
-                break;
-            case 4://下走
-                initDownWalk();
-                break;
-        }
+        changeState(ran);
     }
     /**初始化左走*/
     private void initLeftWalk(){
         setImageResource(R.drawable.anim_rabbit_walk_left);
         startAnim();
-        changeState(WALK_LEFT);
     }
 
     /**初始化右走*/
     private void initRightWalk(){
         setImageResource(R.drawable.anim_rabbit_walk_right);
         startAnim();
-        changeState(WALK_RIGHT);
     }
     /**初始化下走*/
     private void initDownWalk(){
         setImageResource(R.drawable.anim_rabbit_walk_down);
         startAnim();
-        changeState(WALK_DOWN);
     }
 
     /**初始化上走*/
     private void initUpWalk(){
         setImageResource(R.drawable.anim_rabbit_walk_up);
         startAnim();
-        changeState(WALK_UP);
     }
 
     /**初始化随机走*/
@@ -266,10 +264,6 @@ public class Rabbit extends ActorBase {
 
     public int getState() {
         return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 
     public void setOnTouchEventRabbitListener(OnTouchEventRabbitListener onTouchEventRabbitListener) {
