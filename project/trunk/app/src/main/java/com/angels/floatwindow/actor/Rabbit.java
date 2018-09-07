@@ -97,7 +97,7 @@ public class Rabbit extends ActorBase {
         Thread thread = new Thread(timeRunable);
         thread.start();
         startAnim();
-        initRightWalk();
+//        initRightWalk();
     }
 
     public void startAnim() {
@@ -252,7 +252,7 @@ public class Rabbit extends ActorBase {
         }
     }
 
-    private void updateViewPosition(int x,int y) {
+    public void updateViewPosition(int x,int y) {
         wmParams.x = x;
         wmParams.y = y;
         this.x = x;

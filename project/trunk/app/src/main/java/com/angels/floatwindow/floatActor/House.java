@@ -23,7 +23,7 @@ public class House extends ActorBase {
         // 指定图片绘制区域
         Rect rectsrc = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
         // 指定图片在屏幕上显示的区域
-        Rect rectFdst = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+        Rect rectFdst = new Rect(0,0,surfaceView.getWidth(),surfaceView.getHeight());
         mCanvas.drawBitmap(bitmap,rectsrc,rectFdst,null);
 //        mCanvas.drawPath(mPath,mPaint);
     }

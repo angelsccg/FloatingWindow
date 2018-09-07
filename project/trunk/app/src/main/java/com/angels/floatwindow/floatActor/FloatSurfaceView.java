@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -22,13 +23,19 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.angels.floatwindow.R;
+import com.angels.floatwindow.actor.Rabbit;
 import com.angels.floatwindow.service.FloatWindowService;
 import com.angels.floatwindow.utils.ACLogUtil;
 import com.angels.floatwindow.utils.ACToast;
 
 
 public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
-
+    /**宽度*/
+    public static final int WITCH = 200;
+    /**高度*/
+    public static final int HEIGHT = 200;
+    /**每50帧刷新一次屏幕  0.05秒刷一次*/
+    public static final int TIME_IN_FRAME = 50;
     // SurfaceHolder
     private SurfaceHolder mHolder;
     // 用于绘图的Canvas
@@ -47,7 +54,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private long upTime;
 
     /**相对屏幕的坐标*/
-    protected int x,y;
+    public int x,y;
     /**触摸的相对坐标*/
     private float mTouchStartX;
     private float mTouchStartY;
@@ -55,28 +62,56 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private WindowManager.LayoutParams wmParams;
 
 //    private Bitmap bitmap;
+    /**睡眠 入睡时间，0的时候表示没有在睡觉
+     * 1，睡眠 至少要一个小时才能被敲醒
+     * 2，白天睡觉睡两个小时就会自动醒来
+     * 3，晚上睡觉不会自动醒来
+     * 4，睡一个小时后可以被敲醒
+     * */
+    private long startSleep = 0;
 
     /**房子*/
     private House house;
+    /**太阳*/
+    private Sun sun;
+    /**呼噜*/
+    private Snore snore;
 
+
+    /*
+     *创建回调接口
+     */
+    public interface OnTouchEventHouseListener {
+        public void onTouchEvent(MotionEvent event);
+        //醒来
+        public void onWalkUp();
+        //敲门
+        public void onKnock();
+        //睡觉
+        public void onSleep();
+    }
+    private OnTouchEventHouseListener onTouchEventHouseListener;
+    public void setOnTouchHouseRabbitListener(OnTouchEventHouseListener onTouchEventHouseListener) {
+        this.onTouchEventHouseListener = onTouchEventHouseListener;
+    }
 
     public FloatSurfaceView(Context context) {
         super(context);
-        initView();
+        init();
     }
 
     public FloatSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
+        init();
     }
 
     public FloatSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
+        init();
     }
 
 
-    private void initView() {
+    private void init() {
         wmParams = new WindowManager.LayoutParams();
         wmParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         wmParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -93,7 +128,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         setZOrderOnTop(true);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
         mHolder = getHolder();
-        mHolder.setFixedSize(200,171);
+        mHolder.setFixedSize(WITCH,HEIGHT);
         mHolder.addCallback(this);
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -106,8 +141,13 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         // 从资源文件中生成位图bitmap
 //        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.house_daytime01);
 
-        //房子
+        initActor();
+    }
+
+    private void initActor() {
         house = new House(this);
+        sun = new Sun(this);
+        snore = new Snore(this);
     }
 
     @Override
@@ -128,8 +168,6 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
 
 
-    /**每30帧刷新一次屏幕**/
-    public static final int TIME_IN_FRAME = 30;
     @Override
     public void run() {
         while (mIsDrawing) {
@@ -170,11 +208,19 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 //        // 指定图片在屏幕上显示的区域
 //        Rect rectFdst = new Rect(0,0,getWidth(),getHeight());
 //        mCanvas.drawBitmap(bitmap,rectsrc,rectFdst,null);
-
+        mCanvas.drawColor(Color.WHITE);
+        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
         house.draw(mCanvas);
+        sun.draw(mCanvas);
+        if(startSleep != 0){
+            snore.draw(mCanvas);
+        }
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(onTouchEventHouseListener != null){
+            onTouchEventHouseListener.onTouchEvent(event);
+        }
         // 获取相对屏幕的坐标，即以屏幕左上角为原点
         int x = (int) event.getRawX();
         int y = (int) event.getRawY() - FloatWindowService.statusBarHeight;
@@ -198,8 +244,8 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                 long nowTime = System.currentTimeMillis();
                 long lenTime = (nowTime - upTime);
-                if(lenTime <= 200){
-                    ACToast.showShort(getContext(),"敲门啦");
+                if(lenTime <= 300){
+                    knock();
                 }
                 upTime = nowTime;
                 break;
@@ -218,5 +264,42 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.updateViewLayout(this, wmParams);//刷新显示
     }
+
+    /**睡觉*/
+    public void sleep(){
+        if(onTouchEventHouseListener != null){
+            onTouchEventHouseListener.onWalkUp();
+        }
+        this.setVisibility(VISIBLE);
+        startSleep = System.currentTimeMillis();
+        if(onTouchEventHouseListener != null){
+            onTouchEventHouseListener.onSleep();
+        }
+    }
+    /**醒来*/
+    public void wakeUp(){
+        if(onTouchEventHouseListener != null){
+            onTouchEventHouseListener.onWalkUp();
+        }
+        this.setVisibility(GONE);
+        startSleep = 0;
+    }
+    /**敲门*/
+    public void knock(){
+        if(onTouchEventHouseListener != null){
+            onTouchEventHouseListener.onKnock();
+        }
+        long nowTime = System.currentTimeMillis();
+        //睡觉中
+        if(startSleep != 0){
+            long len = nowTime - startSleep;
+            //TODO
+            wakeUp();
+        }
+//        ACToast.showShort(getContext(),"睡觉中。。。");
+    }
+
+
+
 
 }

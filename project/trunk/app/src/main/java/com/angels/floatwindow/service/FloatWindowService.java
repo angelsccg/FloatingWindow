@@ -47,12 +47,8 @@ public class FloatWindowService extends Service {
     private ImageView iv01,iv02,iv03,iv04;
     /**小兔子*/
     private static Rabbit rabbit;
-    /**房子*/
-    private static House house;
-    /**猪a1*/
-    private Pig pig;
 
-    /**容器*/
+    /**容器(房子、太阳、月亮、呼噜)*/
     private FloatSurfaceView floatSurfaceView;
 
     /**
@@ -174,18 +170,15 @@ public class FloatWindowService extends Service {
 //        wmParams.y = screenHeight - menuView.getHeight()*2;
 //        wm.addView(menuView, wmParams);
 //        menuView.setVisibility(View.INVISIBLE);
-        /*
-        * 房子
-        * */
-        wmParams.x = 20;
-        wmParams.y = 20;
-        house = new House(this,wmParams);
-        house.setVisibility(View.GONE);
-        house.changeState(House.DAYTIME);
-        wm.addView(house, wmParams);
+        wmParams.x = 0;
+        wmParams.y = 200;
+        floatSurfaceView = new FloatSurfaceView(this);
+        floatSurfaceView.setVisibility(View.INVISIBLE);
+        wm.addView(floatSurfaceView, wmParams);
+        floatSurfaceView.setOnTouchHouseRabbitListener(houseListener);
 
         rabbit = new Rabbit(this,wmParams);
-        rabbit.setImageResource(R.drawable.anim_rabbit_walk_left);
+        rabbit.setImageResource(R.drawable.anim_rabbit_eat_left);
         rabbit.start();
         wmParams.x = screenWeight/2;
         wmParams.y = screenHeight/2;
@@ -257,39 +250,7 @@ public class FloatWindowService extends Service {
 //                }
 //            }
 //        });
-        rabbit.setOnTouchEventRabbitListener(new Rabbit.OnTouchEventRabbitListener() {
-            @Override
-            public void onTouchEvent(MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
-                        break;
-                    case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
-                        house.setVisibility(View.VISIBLE);
-                        break;
-                    case MotionEvent.ACTION_UP://捕获手指触摸离开动作
-                        house.setVisibility(View.GONE);
-                        // 获取相对屏幕的坐标，即以屏幕左上角为原点
-                        int x = (int) event.getRawX();
-                        int y = (int) event.getRawY();
-                        ACLogUtil.i("控件位置-->xy:" + x + "--" + y);
-                        if(isRrash(x,y,house)){
-                            ACToast.showShort(FloatWindowService.this,"睡觉啦");
-                            house.sleep();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
-        /*
-         * 测试
-         * */
-        wmParams.x = 20;
-        wmParams.y = 20;
-        floatSurfaceView = new FloatSurfaceView(this);
-        wm.addView(floatSurfaceView, wmParams);
+        rabbit.setOnTouchEventRabbitListener(rabbitListener);
     }
 
     /**是否碰撞*/
@@ -311,5 +272,66 @@ public class FloatWindowService extends Service {
             imageView.setImageResource(R.mipmap.fly_000);
         }
     }
+
+    /**主角监听*/
+    Rabbit.OnTouchEventRabbitListener rabbitListener = new Rabbit.OnTouchEventRabbitListener() {
+        @Override
+        public void onTouchEvent(MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
+                    break;
+                case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
+                    floatSurfaceView.setVisibility(View.VISIBLE);
+                    break;
+                case MotionEvent.ACTION_UP://捕获手指触摸离开动作
+                    floatSurfaceView.setVisibility(View.GONE);
+                    // 获取相对屏幕的坐标，即以屏幕左上角为原点
+                    int x = (int) event.getRawX();
+                    int y = (int) event.getRawY();
+                    ACLogUtil.i("控件位置-->xy:" + x + "--" + y);
+                    if(isRrash(x,y,floatSurfaceView)){
+                        ACToast.showShort(FloatWindowService.this,"睡觉去啦");
+                        floatSurfaceView.sleep();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    /*触摸离开动作时间*/
+    private long houseUpTime;
+    /**房子监听*/
+    FloatSurfaceView.OnTouchEventHouseListener houseListener = new FloatSurfaceView.OnTouchEventHouseListener() {
+        @Override
+        public void onTouchEvent(MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
+                    break;
+                case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
+                    break;
+                case MotionEvent.ACTION_UP://捕获手指触摸离开动作
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        @Override
+        public void onWalkUp() {
+            rabbit.setVisibility(View.VISIBLE);
+            rabbit.updateViewPosition(floatSurfaceView.x + floatSurfaceView.getWidth()/2,floatSurfaceView.y + floatSurfaceView.getHeight()/3*2);
+        }
+
+        @Override
+        public void onKnock() {
+
+        }
+
+        @Override
+        public void onSleep() {
+            rabbit.setVisibility(View.INVISIBLE);
+        }
+    };
 }
 
