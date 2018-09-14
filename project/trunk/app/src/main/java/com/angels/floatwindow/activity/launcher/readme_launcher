@@ -1,0 +1,16 @@
+1.简介
+Android Launcher ，也就是Android 的桌面应用程序。
+功能主要包括有：显示并启动已安装的应用程序、显示桌面（动态）壁纸、显示系统小部件widget 等。
+
+2.实现
+在启动activity中添加
+<category android:name="android.intent.category.HOME" />
+<category android:name="android.intent.category.DEFAULT" />
+此时系统可以识别该应用程序为桌面应用程序。
+
+
+
+AppWidgetProvider：该类继承自broadcastreceiver，需要在清单文件中注册<receiver>标签。
+AppWidgetProviderInfo：该类只需写xml文件就可以了，xml放在res/xml下面，跟标签为<appwidget-provider>.
+RemoteViewsService:该类继承自service,需要在清单文件中注册。
+RemoteViewsFactory:该类为RemoteViewsService的内部类，处理service中的工作

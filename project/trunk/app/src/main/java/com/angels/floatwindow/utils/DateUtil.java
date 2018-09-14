@@ -410,5 +410,20 @@ public class DateUtil {
         return (end - start)/1000;
     }
 
+    /**
+     * 判断现在是晚上
+     *
+     *
+     * */
+    public static boolean getCurrentNight(){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        String hour= sdf.format(new Date());
+        int k  = Integer.parseInt(hour)  ;
+        if ((k>=0 && k<6) ||(k >=18 && k<24)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

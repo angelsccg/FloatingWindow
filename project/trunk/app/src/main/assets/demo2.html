@@ -1,0 +1,81 @@
+﻿<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        测试
+    </title>
+</head>
+
+<body>
+    <p>
+        <xmp id="show">
+        </xmp>
+    </p>
+    <p>
+        <xmp id="init">
+        </xmp>
+    </p>
+    <p>
+        <input type="text" id="text1" value="小明"/>
+    </p>
+
+    <p>
+        <input type="text" id="text2" value="123456"/>
+    </p>
+
+    <p>
+        <input type="button" id="enter1" value="登录（响应Native方法）" onclick="login();"
+        />
+    </p>
+    <p>
+        <a  href="https://www.baidu.com/">百度</a><br/>
+    </p>
+
+
+</body>
+
+<script>
+    function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                    'WebViewJavascriptBridgeReady'
+                    , function() {
+                        callback(WebViewJavascriptBridge)
+                    },
+                    false
+                );
+            }
+        }
+    // 第一连接时初始化bridage
+    connectWebViewJavascriptBridge(function(bridge) {
+        bridge.init();
+        // 注册一个"callNative"函数,
+        bridge.registerHandler("callNative", function(options, responseCallback) {
+            //data是android发来的数据
+            alert('android发来的数据:'+  options);
+            var responseData = "发给android数据--我是js";
+            responseCallback(responseData);
+        });
+    })
+
+    function login() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            var options = "name:" + str1 + ",pass:" + str2;
+            //call native method
+            window.WebViewJavascriptBridge.callHandler(
+                'login'
+                , {'param': options }
+                , function(responseData) {
+                    document.getElementById("show").innerHTML = "android发来的数据 = " + responseData;
+                }
+            );
+        }
+
+
+
+</script>
+
+</html>

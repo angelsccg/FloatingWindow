@@ -1,19 +1,14 @@
 package com.angels.floatwindow.actor;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.angels.floatwindow.R;
-import com.angels.floatwindow.utils.ACLogUtil;
+import com.angels.library.utils.AcLogUtil;
 
 public class Animal extends ActorBase {
 
@@ -62,7 +57,7 @@ public class Animal extends ActorBase {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        ACLogUtil.i("animal-->onSizeChanged:" + w + "--" + h);
+        AcLogUtil.i("animal-->onSizeChanged:" + w + "--" + h);
     }
 
     @Override
@@ -113,7 +108,6 @@ public class Animal extends ActorBase {
     private void updateViewPosition(int x,int y) {
         wmParams.x = x;
         wmParams.y = y;
-        ACLogUtil.i("悬浮窗 位置：" + wmParams.x + "--" + wmParams.y);
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.updateViewLayout(this, wmParams);//刷新显示
     }

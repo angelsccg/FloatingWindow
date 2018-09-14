@@ -1,0 +1,30 @@
+﻿<html>
+<head>
+    <title>网页加载错误</title>
+</head>
+<style>
+body {
+	text-align: center;
+	margin-top: 30%;
+}
+
+.msg {
+	margin-top: 20px;
+}
+
+div {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+</style>
+<body>
+<div id="error" class="content" style="overflow: hidden;">
+    <img src="images/error.png" width="40%" />
+    <div class="msg" style="font-size:30px">加载失败，请点击屏幕重试</div>
+</div>
+</body>
+<script type="text/javascript">
+	error.onclick = function() {
+		window.location.reload();
+	}
+</script>
+</html>

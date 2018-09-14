@@ -2,15 +2,11 @@ package com.angels.floatwindow.floatActor;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,13 +16,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-
-import com.angels.floatwindow.R;
-import com.angels.floatwindow.actor.Rabbit;
-import com.angels.floatwindow.service.FloatWindowService;
-import com.angels.floatwindow.utils.ACLogUtil;
-import com.angels.floatwindow.utils.ACToast;
+import com.angels.floatwindow.service.AppWidgetService;
+import com.angels.floatwindow.service.ServiceFloat;
+import com.angels.floatwindow.utils.AngelsFloatUtil;
+import com.angels.floatwindow.utils.DateUtil;
+import com.angels.library.utils.AcToastUtil;
 
 
 public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
@@ -63,17 +57,35 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
 //    private Bitmap bitmap;
     /**睡眠 入睡时间，0的时候表示没有在睡觉
-     * 1，睡眠 至少要一个小时才能被敲醒
+     * 1，睡眠 至少要一个小时才能被一次敲醒
      * 2，白天睡觉睡两个小时就会自动醒来
      * 3，晚上睡觉不会自动醒来
-     * 4，睡一个小时后可以被敲醒
+     * 4，睡一个小时后可以被一次敲醒
+     * 5，睡觉还不到一个小时，被连续敲门了5次就强制醒来，敲门间隔10秒
      * */
     private long startSleep = 0;
+    /**
+     * 最近一次敲门时间
+     * */
+    private long knockTime  = 0;
+    /**
+     * 连续敲门的次数，敲门间隔10秒
+     * */
+    private int knockCount  = 0;
+    /**
+     * 旅行 开始旅行时间，0的时候表示没有在旅行
+     *
+     * 1，旅行至少半天
+     * 2，
+     * */
+    private long startTour = 0;
 
     /**房子*/
     private House house;
     /**太阳*/
     private Sun sun;
+    /**月亮*/
+    private Moon moon;
     /**呼噜*/
     private Snore snore;
 
@@ -82,13 +94,13 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
      *创建回调接口
      */
     public interface OnTouchEventHouseListener {
-        public void onTouchEvent(MotionEvent event);
+         void onTouchEvent(MotionEvent event);
         //醒来
-        public void onWalkUp();
+         void onWalkUp();
         //敲门
-        public void onKnock();
+         void onKnock();
         //睡觉
-        public void onSleep();
+         void onSleep();
     }
     private OnTouchEventHouseListener onTouchEventHouseListener;
     public void setOnTouchHouseRabbitListener(OnTouchEventHouseListener onTouchEventHouseListener) {
@@ -147,6 +159,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private void initActor() {
         house = new House(this);
         sun = new Sun(this);
+        moon = new Moon(this);
         snore = new Snore(this);
     }
 
@@ -195,27 +208,23 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 Thread.yield();
             }
         }
-
     }
 
     //绘图操作
-
     private void draw() {
-//        //SurfaceView背景
-//        mCanvas.drawColor(Color.RED);
-//        // 指定图片绘制区域
-//        Rect rectsrc = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
-//        // 指定图片在屏幕上显示的区域
-//        Rect rectFdst = new Rect(0,0,getWidth(),getHeight());
-//        mCanvas.drawBitmap(bitmap,rectsrc,rectFdst,null);
         mCanvas.drawColor(Color.WHITE);
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
         house.draw(mCanvas);
-        sun.draw(mCanvas);
+        if( DateUtil.getCurrentNight()){
+            moon.draw(mCanvas);
+        }else {
+            sun.draw(mCanvas);
+        }
         if(startSleep != 0){
             snore.draw(mCanvas);
         }
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(onTouchEventHouseListener != null){
@@ -223,7 +232,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         }
         // 获取相对屏幕的坐标，即以屏幕左上角为原点
         int x = (int) event.getRawX();
-        int y = (int) event.getRawY() - FloatWindowService.statusBarHeight;
+        int y = (int) event.getRawY() - ServiceFloat.statusBarHeight;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
                 downTime = System.currentTimeMillis();
@@ -235,7 +244,6 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             case MotionEvent.ACTION_MOVE://捕获手指触摸移动动作
                 moveTime = System.currentTimeMillis();
                 updateViewPosition((int)(x - mTouchStartX),(int)(y - mTouchStartY));
-
                 break;
             case MotionEvent.ACTION_UP://捕获手指触摸离开动作
                 updateViewPosition((int)(x - mTouchStartX),(int)(y - mTouchStartY));
@@ -260,46 +268,57 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         wmParams.y = y;
         this.x = x;
         this.y = y;
-        ACLogUtil.i("悬浮窗 位置：" + wmParams.x + "--" + wmParams.y);
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.updateViewLayout(this, wmParams);//刷新显示
     }
 
     /**睡觉*/
     public void sleep(){
-        if(onTouchEventHouseListener != null){
-            onTouchEventHouseListener.onWalkUp();
-        }
         this.setVisibility(VISIBLE);
         startSleep = System.currentTimeMillis();
         if(onTouchEventHouseListener != null){
             onTouchEventHouseListener.onSleep();
         }
     }
+
     /**醒来*/
     public void wakeUp(){
+        this.setVisibility(GONE);
+        startSleep = 0;
         if(onTouchEventHouseListener != null){
             onTouchEventHouseListener.onWalkUp();
         }
-        this.setVisibility(GONE);
-        startSleep = 0;
     }
+
     /**敲门*/
     public void knock(){
+        long nowTime = System.currentTimeMillis();
+        if(startSleep != 0){//睡觉中
+            long len = nowTime - startSleep;
+            if(len > 1000 * 60 * 60){//睡觉超过一个小时
+                wakeUp();
+            }else {//睡觉不到一个小时
+                long knockLen = nowTime - knockTime;
+                if(knockLen > 1000 * 10){//敲门间隔超过10秒
+                    knockCount = 1;
+                }else {
+                    knockCount ++;
+                    if(knockCount >= 5){
+                        wakeUp();
+                    }
+                    String msg = AngelsFloatUtil.getSleep(knockCount);
+                    AcToastUtil.showShort(getContext(),msg);
+                }
+            }
+        }else if(startTour != 0){//旅行中
+            long len = nowTime - startTour;
+            AcToastUtil.showShort(getContext(),"旅行中。。。");
+        }
+
         if(onTouchEventHouseListener != null){
             onTouchEventHouseListener.onKnock();
         }
-        long nowTime = System.currentTimeMillis();
-        //睡觉中
-        if(startSleep != 0){
-            long len = nowTime - startSleep;
-            //TODO
-            wakeUp();
-        }
-//        ACToast.showShort(getContext(),"睡觉中。。。");
+
+        knockTime = nowTime;
     }
-
-
-
-
 }

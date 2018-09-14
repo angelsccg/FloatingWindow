@@ -1,0 +1,183 @@
+﻿<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        Tamic
+    </title>
+</head>
+
+<body>
+    <p>
+        <xmp id="show">
+        </xmp>
+    </p>
+    <p>
+        <xmp id="init">
+        </xmp>
+    </p>
+    <p>
+        <input type="text" id="text1" value="username"/>
+    </p>
+
+    <p>
+        <input type="text" id="text2" value="password"/>
+    </p>
+
+    <p>
+        <input type="button" id="enter1" value="登录（响应Native方法）" onclick="login();"
+        />
+    </p>
+
+    <p>
+        <input type="button" id="enter" value="发消息给Native" onclick="testClick();"
+        />
+    </p>
+
+
+    <p>
+        <input type="button" id="enter2" value="显示源代码" onclick="testDiv();"/>
+    </p>
+
+
+    <p>
+        <input type="button" id="CallNative" value="调用native" onclick="onUrl();"/>
+    </p>
+
+    <p>
+        <input type="file" id="open" value="打开文件" onclick="onOpen();"/>
+    </p>
+
+    <p>
+        <a  href="https://www.baidu.com/">百度</a><br/>
+    </p>
+    <p>
+        <input type="button" id="close" value="关闭" onclick="onClose();"/>
+    </p>
+
+</body>
+
+<script>
+
+        function bridgeLog(logContent) {
+            document.getElementById("show").innerHTML = 'ccg001' + logContent;
+        }
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                    'WebViewJavascriptBridgeReady'
+                    , function() {
+                        callback(WebViewJavascriptBridge)
+                    },
+                    false
+                );
+            }
+        }
+       // 第一连接时初始化bridage
+        connectWebViewJavascriptBridge(function(bridge) {
+            bridge.init(function(message, responseCallback) {
+                console.log('JS got a message', message);
+                alert('发送信息 say:'+  message);
+                var options = {
+                    'Javascript resquest': 'Hello java! 我是 js!'
+                };
+                console.log('JS responding with', options);
+                responseCallback(options);
+            });
+
+            // 注册一个"callNative"函数,
+            bridge.registerHandler("callNative", function(options, responseCallback) {
+                document.getElementById("show").innerHTML = ("options from Java: = " + options);
+                var responseData = "hello java !  我要你的地址!";
+
+                alert('JS say:'+  responseData);
+
+                // response层
+                responseCallback(responseData);
+            });
+        })
+        function onUrl() {
+          　
+            var options = "我要你一个url";
+            //call native method
+            window.WebViewJavascriptBridge.callHandler(
+                'callJs'
+                , {'param': options }
+                , function(responseData) {
+
+                 alert('Js 收到你的地址:'+ responseData);
+
+                }
+            );
+        }
+        function onClose(){
+            close();
+        }
+
+        function close(){
+            window.WebViewJavascriptBridge.callHandler(
+                    'close'
+                    , null
+                    , null
+                );
+        }
+
+
+          function onOpen() {
+          　
+            var options = "我要你打开相册";
+            //call native method
+            window.WebViewJavascriptBridge.callHandler(
+                'open'
+                , {'param': options }
+                , function(responseData) {
+
+                 alert('Js 收到你的:'+ responseData);
+                 document.getElementById("open").innerHTML = "send get responseData from java, options = " + responseData;
+                }
+            );
+        }
+        function testDiv() {
+            document.getElementById("show").innerHTML = document.getElementsByTagName("html")[0].innerHTML;
+        }
+        function testClick() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            //发送消息给java本地代码
+            var options = {id: 1, content: "这是一个图片 <img src=\"a.png\"/> test\r\nhahaha"};
+            window.WebViewJavascriptBridge.send(
+                options
+                , function(responseData) {
+                    document.getElementById("show").innerHTML = "repsonseData from java, options = " + responseData
+                }
+            );
+        }
+        function login() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            var options = "name:" + str1 + ",pass:" + str2;
+            //call native method
+            window.WebViewJavascriptBridge.callHandler(
+                'login'
+                , {'param': options }
+                , function(responseData) {
+                    document.getElementById("show").innerHTML = "send get responseData from java, options = " + responseData
+                }
+            );
+        }
+
+        bridge.init(function(message, responseCallback) {
+        console.log('JS got a message', message);
+        var options = {
+            'Javascript Responds': 'Wee!'
+        };
+        console.log('JS responding with', options);
+        responseCallback(options);
+    });
+
+
+
+</script>
+
+</html>

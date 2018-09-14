@@ -8,8 +8,9 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.angels.floatwindow.R;
-import com.angels.floatwindow.service.FloatWindowService;
-import com.angels.floatwindow.utils.ACLogUtil;
+import com.angels.floatwindow.service.AppWidgetService;
+import com.angels.floatwindow.service.ServiceFloat;
+import com.angels.library.utils.AcLogUtil;
 
 public class Rabbit extends ActorBase {
 
@@ -107,7 +108,7 @@ public class Rabbit extends ActorBase {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        ACLogUtil.i("animal-->onSizeChanged:" + w + "--" + h);
+        AcLogUtil.i("animal-->onSizeChanged:" + w + "--" + h);
     }
 
     @Override
@@ -168,7 +169,7 @@ public class Rabbit extends ActorBase {
     /**初始化随机走*/
     private void walkToRandom(){
         int ran = (int) (Math.random()*4 + 1);
-        ACLogUtil.i("随机状态-->" + ran );
+        AcLogUtil.i("随机状态-->" + ran );
         changeState(ran);
     }
     /**初始化左走*/
@@ -229,7 +230,7 @@ public class Rabbit extends ActorBase {
     }
     /**右走*/
     private void walkToRight(){
-        if(x >= FloatWindowService.screenWeight - getWidth()){
+        if(x >= ServiceFloat.screenWeight - getWidth()){
             walkToRandom();
         }else {
             updateViewPosition(x+=speed,y);
@@ -237,7 +238,7 @@ public class Rabbit extends ActorBase {
     }
     /**下走*/
     private void walkToDowm(){
-        if(y <= FloatWindowService.screenHeight - getHeight()){
+        if(y <= ServiceFloat.screenHeight - getHeight()){
             walkToRandom();
         }else {
             updateViewPosition(x,y+=speed);
@@ -257,7 +258,6 @@ public class Rabbit extends ActorBase {
         wmParams.y = y;
         this.x = x;
         this.y = y;
-        ACLogUtil.i("悬浮窗 位置：" + wmParams.x + "--" + wmParams.y);
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.updateViewLayout(this, wmParams);//刷新显示
     }
