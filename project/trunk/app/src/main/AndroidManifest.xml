@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.angels.floatwindow">
+    package="com.angels.world">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
@@ -103,7 +103,7 @@
             android:name=".activity.RulerActivity"
             android:configChanges="orientation"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
 
 
         <!--高德地图 定位需要的服务 使用2.0的定位需要加上这个 -->
@@ -119,7 +119,7 @@
         </service>
 
         <service
-            android:name="com.angels.floatwindow.service.ServiceFloat"
+            android:name="com.angels.world.service.ServiceFloat"
             android:enabled="true"
             android:process=":service1">
             <!--//放入新进程-->
@@ -135,7 +135,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.angels.floatwindow.service.ServiceFloatProtect"
+            android:name="com.angels.world.service.ServiceFloatProtect"
             android:enabled="true"
             android:process=":service2">
             <!--//放入新进程-->
