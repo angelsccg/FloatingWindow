@@ -1,36 +1,9 @@
 package com.angels.world.service;
 
 
-import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.PixelFormat;
-import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.RemoteViewsService;
-
-import com.angels.world.floatActor.FloatSurfaceView;
-import com.angels.world.R;
-import com.angels.world.actor.Rabbit;
-import com.angels.world.utils.AppUtil;
-import com.angels.library.utils.AcLogUtil;
-import com.angels.library.utils.AcToastUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by chencg on 2018/8/24.

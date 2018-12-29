@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:textSize="14sp"
                 android:textColor="@color/white"
-                android:background="@drawable/selector_default_bg"
+                android:background="@drawable/ac_selector_default_bg"
                 android:drawablePadding="8dp"
                 android:visibility="gone"
                 android:padding="10dp"/>
@@ -30,11 +30,11 @@
 
             <ImageView
                 android:id="@+id/iv_left"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/selector_default_bg"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/ac_selector_default_bg"
                 android:visibility="gone"
-                android:layout_margin="10dp"/>
+                android:padding="10dp"/>
         </LinearLayout>
 
         <TextView
@@ -56,17 +56,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/selector_default_bg"
+            android:background="@drawable/ac_selector_default_bg"
             android:gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="10dp">
 
+
             <ImageView
                 android:id="@+id/iv_right"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:background="@drawable/ac_selector_default_bg"/>
             <TextView
                 android:id="@+id/tv_right"
                 android:layout_width="wrap_content"
@@ -75,7 +77,17 @@
                 android:textColor="@color/white"
                 android:drawablePadding="8dp"
                 android:visibility="gone"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:background="@drawable/ac_selector_default_bg"/>
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateDrawable="@drawable/ac_anim_progress"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </RelativeLayout>

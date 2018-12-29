@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.angels.library.widget.AcCustomTitleLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textColor="@color/black_txt"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_uuid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/blue4_button"
+                    android:text="查看UUID"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_receive_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ac_shap_border_black"
+                    android:hint="接收数据的UUID（Service）"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv_receive_service_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ac_selector_default_bg"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_more" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_receive_characteristic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ac_shap_border_black"
+                    android:hint="接收数据的UUID（Characteristic）"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv_receive_characteristic_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ac_selector_default_bg"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_more" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_receive"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/blue4_button"
+                android:text="接收数据"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_send_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ac_shap_border_black"
+                    android:hint="发送数据的UUID（Service）"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv_send_service_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ac_selector_default_bg"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_more" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_send_characteristic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ac_shap_border_black"
+                    android:hint="发送数据的UUID（Characteristic）"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv_send_characteristic_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ac_selector_default_bg"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_more" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_send_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ac_shap_border_black"
+                    android:hint="发送数据的(如：12,13,33,44)"
+                    android:lines="1"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/blue4_button"
+                android:text="发送数据"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:hint="接收到的数据"
+                android:lines="8"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/blue_line" />
+
+            <TextView
+                android:id="@+id/tv_write"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:hint="写入的数据onCharacteristicWrite"
+                android:lines="2"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/blue_line" />
+
+            <TextView
+                android:id="@+id/tv_read"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:hint="读取的数据onCharacteristicRead"
+                android:lines="2"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

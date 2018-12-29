@@ -16,8 +16,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import com.angels.world.service.AppWidgetService;
-import com.angels.world.service.ServiceFloat;
+
+import com.angels.world.service.WorldService;
 import com.angels.world.utils.AngelsFloatUtil;
 import com.angels.world.utils.DateUtil;
 import com.angels.library.utils.AcToastUtil;
@@ -35,7 +35,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     // 用于绘图的Canvas
     private Canvas mCanvas;
     // 子线程标志位
-    private boolean mIsDrawing;
+    public boolean mIsDrawing;
 
     private Paint mPaint;
 
@@ -180,12 +180,14 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         mIsDrawing = false;
     }
 
-
+    long startTime;
+    long endTime;
+    int diffTime;
     @Override
     public void run() {
         while (mIsDrawing) {
             /**取得更新之前的时间**/
-            long startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
             /**在这里加上线程安全锁**/
             synchronized (mHolder) {
                 /**拿到当前画布 然后锁定**/
@@ -196,10 +198,10 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             }
 
             /**取得更新结束的时间**/
-            long endTime = System.currentTimeMillis();
+            endTime = System.currentTimeMillis();
 
             /**计算出一次更新的毫秒数**/
-            int diffTime  = (int)(endTime - startTime);
+            diffTime  = (int)(endTime - startTime);
 
             /**确保每次更新时间为30帧**/
             while(diffTime <=TIME_IN_FRAME) {
@@ -232,7 +234,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         }
         // 获取相对屏幕的坐标，即以屏幕左上角为原点
         int x = (int) event.getRawX();
-        int y = (int) event.getRawY() - ServiceFloat.statusBarHeight;
+        int y = (int) event.getRawY() - WorldService.statusBarHeight;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // 捕获手指触摸按下动作
                 downTime = System.currentTimeMillis();

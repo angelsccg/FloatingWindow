@@ -1,6 +1,8 @@
 package com.angels.world.mode;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable {
     /**id*/
     private String id;
     /**创建时间*/

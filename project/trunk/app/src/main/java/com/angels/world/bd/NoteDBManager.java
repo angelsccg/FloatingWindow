@@ -20,10 +20,10 @@ public class NoteDBManager {
     /**表名称*/
     public static final String NOTE_TABLE_NAME = "note";
     /**用户表创建sql语句*/
-    public static final String CREATE_NOTE_TABLE = "create table "+ NOTE_TABLE_NAME +"(id INTEGER PRIMARY KEY AUTOINCREMENT,content text,create_time varchar(20),update_time varchar(20))";
+    public static final String CREATE_TABLE = "create table "+ NOTE_TABLE_NAME +"(id INTEGER PRIMARY KEY AUTOINCREMENT,content text,create_time varchar(20),update_time varchar(20))";
 
     /**
-     * 添加用户 (如果本地数据库已经保存了该用户，就修改用户信息)
+     * 添加笔记
      *
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
@@ -49,7 +49,7 @@ public class NoteDBManager {
     }
 
     /**
-     * 删除user
+     * 删除note
      * */
     public static void deleteNote(String id){
         DatabaseHelper helper = new DatabaseHelper(MyApplication.getApplication());
@@ -62,7 +62,7 @@ public class NoteDBManager {
     }
 
     /**
-     * 删除全部user
+     * 删除全部note
      * */
     public static void deletAllNote(){
         DatabaseHelper helper = new DatabaseHelper(MyApplication.getApplication());

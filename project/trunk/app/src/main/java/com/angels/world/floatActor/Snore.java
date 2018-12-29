@@ -31,14 +31,15 @@ public class Snore extends ActorBase {
             bitmaps[i] = BitmapFactory.decodeResource(surfaceView.getResources(), bitmapIds[i]);
         }
     }
+    private Rect rectsrc,rectFdst;
     //绘图操作
     @Override
     protected void draw(Canvas mCanvas) {
         // 指定图片绘制区域
-        Rect rectsrc = new Rect(0,0,bitmaps[position].getWidth(),bitmaps[position].getHeight());
+        rectsrc = new Rect(0,0,bitmaps[position].getWidth(),bitmaps[position].getHeight());
         // 指定图片在屏幕上显示的区域
         int len = 10;
-        Rect rectFdst = new Rect(0 + len,len,bitmaps[position].getWidth() + len,bitmaps[position].getHeight() + len);
+        rectFdst = new Rect(0 + len,len,bitmaps[position].getWidth() + len,bitmaps[position].getHeight() + len);
         mCanvas.drawBitmap(bitmaps[position],rectsrc,rectFdst,null);
         int a = ++times%(ANIM_TIME/FloatSurfaceView.TIME_IN_FRAME);
         if(a == 0){

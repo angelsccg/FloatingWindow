@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.angels.world">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
@@ -34,6 +36,14 @@
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-feature
+        android:name="android.software.live_wallpaper"
+        android:required="true" >
+    </uses-feature>
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -44,10 +54,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--高德地图开发者申请的key-->
-        <!-- <meta-data android:name="key_angelsccg" android:value="538661b6d616bae8fa305427962a1897"/>-->
+        <!-- <meta-data android:name="key_angelsccg" android:value="8cb933e0c549c965bf505def76c8f83f"/>-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="538661b6d616bae8fa305427962a1897" />
+            android:value="8cb933e0c549c965bf505def76c8f83f" />
 
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -105,23 +115,75 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
+        <!--app信息-->
+        <activity
+            android:name=".activity.AppInfoActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!--指南针-->
+        <activity
+            android:name=".activity.CompassActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!--计步器-->
+        <activity
+            android:name=".activity.StepActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!--蓝牙-->
+        <activity
+            android:name=".activity.BluetoothActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.BluetoothListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.BluetoothBleActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.BluetoothSppActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
 
         <!--高德地图 定位需要的服务 使用2.0的定位需要加上这个 -->
         <service android:name="com.amap.api.location.APSService" />
 
-
+        <service android:name=".service.LiveWallpaperService"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <!-- 为动态壁纸配置intent-filter -->
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <!-- 为动态壁纸配置meta-data -->
+            <meta-data android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
         <service
             android:name=".service.AppWidgetService"
             android:enabled="true">
-            <intent-filter android:priority="1000">
+            <intent-filter>
                 <action android:name="com.angels.floatwindow.FloatWindowService" />
             </intent-filter>
         </service>
 
         <service
-            android:name="com.angels.world.service.ServiceFloat"
+            android:name="com.angels.world.service.WorldService"
             android:enabled="true"
-            android:process=":service1">
+            android:process=":serviceFloat">
             <!--//放入新进程-->
             <intent-filter android:priority="1000">
                 <!-- 系统启动完成后会调用-->
@@ -135,9 +197,9 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.angels.world.service.ServiceFloatProtect"
+            android:name="com.angels.world.service.WorldProtectService"
             android:enabled="true"
-            android:process=":service2">
+            android:process=":serviceFloatProtect">
             <!--//放入新进程-->
             <intent-filter>
                 <!-- 系统启动完成后会调用-->

@@ -19,7 +19,15 @@ import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 
+/**
+ *
+ * MD5: 77:B6:6E:8B:AE:21:AB:8D:2A:17:02:DC:7A:D9:F4:3E
+ SHA1: 69:17:7B:A0:91:7E:99:50:AB:54:28:55:DA:FF:6B:4C:FE:94:30:BA
+ SHA256: 50:CF:0E:A3:69:B6:A4:59:C9:CB:80:8A:D8:8A:89:71:8A:77:80:14:6D:E5:DD:55:94:0B:E5:14:B0:D9:2A:94
+ 签名算法名称: SHA256withRSA
 
+ *
+ * */
 public class MyApplication extends Application{
     public static final String UPDATE_STATUS_ACTION = "com.umeng.message.example.action.UPDATE_STATUS";
     private Handler handler;
@@ -30,8 +38,8 @@ public class MyApplication extends Application{
         myApp = this;
         //初始化组件化基础库, 统计SDK/推送SDK/分享SDK都必须调用此初始化接口
         //UMConfigure.init(Context context, String appkey, String channel, int deviceType, String pushSecret);
-        UMConfigure.init(this, "5b7a2309f43e4853f900016a", "Umeng", UMConfigure.DEVICE_TYPE_PHONE,
-                "20fefb7f23021360e076981eae3f8641");
+        UMConfigure.init(this, "5b8016b1f43e4814f900002b", "Umeng", UMConfigure.DEVICE_TYPE_PHONE,
+                "492fcef23a88159ddc4939013af851bb");
         //PushSDK初始化(如使用推送SDK，必须调用此方法)
         initUpush();
     }
@@ -40,6 +48,8 @@ public class MyApplication extends Application{
     }
 
     private void initUpush() {
+        AcLogUtil.i("友盟-->初始化");
+        System.out.println("友盟-->初始化233");
         PushAgent mPushAgent = PushAgent.getInstance(this);
         handler = new Handler(getMainLooper());
 
@@ -95,7 +105,7 @@ public class MyApplication extends Application{
              */
             @Override
             public Notification getNotification(Context context, UMessage msg) {
-                AcLogUtil.i("友盟-->getNotification" + msg.builder_id);
+                AcLogUtil.i("友盟-->getNotification：" + msg.builder_id);
                 switch (msg.builder_id) {
                     case 1:
                         Notification.Builder builder = new Notification.Builder(context);
@@ -110,7 +120,6 @@ public class MyApplication extends Application{
                                 .setSmallIcon(getSmallIconId(context, msg))
                                 .setTicker(msg.ticker)
                                 .setAutoCancel(true);
-
                         return builder.getNotification();
                     default:
                         //默认为0，若填写的builder_id并不存在，也使用默认。
@@ -150,6 +159,7 @@ public class MyApplication extends Application{
         //使用自定义的NotificationHandler
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
 
+        AcLogUtil.i("友盟-->开始注册友盟推送" );
         //注册推送服务 每次调用register都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
@@ -160,7 +170,7 @@ public class MyApplication extends Application{
 
             @Override
             public void onFailure(String s, String s1) {
-                AcLogUtil.i("友盟-->register failed: " + s + " " + s1);
+                AcLogUtil.i("友盟-->register failed: " + s + "--" + s1);
                 sendBroadcast(new Intent(UPDATE_STATUS_ACTION));
             }
         });

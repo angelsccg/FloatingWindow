@@ -1,29 +1,31 @@
 package com.angels.world.activity.fragment;
 
-import android.appwidget.AppWidgetManager;
+import android.app.WallpaperManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.angels.world.R;
+import com.angels.world.activity.AppInfoActivity;
+import com.angels.world.activity.BluetoothActivity;
+import com.angels.world.activity.CompassActivity;
 import com.angels.world.activity.MapActivity;
 import com.angels.world.activity.RulerActivity;
+import com.angels.world.activity.StepActivity;
 import com.angels.world.activity.WebviewActivity;
 import com.angels.world.activity.launcher.NoteWidgetActivity;
-import com.angels.world.bd.NoteDBManager;
-import com.angels.world.service.ServiceFloat;
-import com.angels.world.service.ServiceFloatProtect;
-import com.angels.library.utils.AcAppUtil;
+import com.angels.world.service.LiveWallpaperService;
+import com.angels.world.service.WorldService;
+import com.angels.world.service.WorldProtectService;
 import com.angels.library.utils.AcToastUtil;
 import com.angels.library.widget.AcCustomTitleLayout;
 
@@ -31,7 +33,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**标题栏*/
     private AcCustomTitleLayout titleLayout;
     /**菜单*/
-    private LinearLayout llPet,llNote,llRuler,llEmpty;
+    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth;
     private  View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,34 +55,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         llPet = view.findViewById(R.id.ll_pet);
         llNote = view.findViewById(R.id.ll_note);
         llRuler = view.findViewById(R.id.ll_ruler);
+        llInfo = view.findViewById(R.id.ll_info);
+        llWallpaper = view.findViewById(R.id.ll_wallpaper);
         llEmpty = view.findViewById(R.id.ll_empty);
+        llMap = view.findViewById(R.id.ll_map);
+        llWeb = view.findViewById(R.id.ll_web);
+        llCompass = view.findViewById(R.id.ll_compass);
+        llStep = view.findViewById(R.id.ll_step);
+        llBluetooth = view.findViewById(R.id.ll_bluetooth);
         llPet.setOnClickListener(this);
         llNote.setOnClickListener(this);
         llRuler.setOnClickListener(this);
         llEmpty.setOnClickListener(this);
-
-
-        Button btn01 = view.findViewById(R.id.btn01);
-        btn01.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MapActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button btn02 = view.findViewById(R.id.btn02);
-        btn02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), WebviewActivity.class);
-                String url = "file:///android_asset/study/study02_rem.html";
-//                String url = "http://typhoon.zjwater.gov.cn/default.aspx";
-                intent.putExtra(WebviewActivity.DATA_URL,url);
-                startActivity(intent);
-            }
-        });
-
+        llInfo.setOnClickListener(this);
+        llWallpaper.setOnClickListener(this);
+        llMap.setOnClickListener(this);
+        llWeb.setOnClickListener(this);
+        llCompass.setOnClickListener(this);
+        llStep.setOnClickListener(this);
+        llBluetooth.setOnClickListener(this);
     }
 
     private void initTitleView(View view) {
@@ -90,30 +83,72 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ll_pet:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getContext())) {
-                    AcToastUtil.showShort( getContext(),"请授权！");
+                    AcToastUtil.showShort(getContext(), "请授权！");
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
                     startActivityForResult(intent, 1001);
-                }else {
-                    Intent i1 = new Intent(getContext(), ServiceFloat.class);
+                } else {
+                    Intent i1 = new Intent(getContext(), WorldService.class);
                     getContext().startService(i1);
 
-                    Intent i2 = new Intent(getContext(), ServiceFloatProtect.class);
+                    Intent i2 = new Intent(getContext(), WorldProtectService.class);
                     getContext().startService(i2);
                 }
                 break;
-            case R.id.ll_note:
+            case R.id.ll_note: {
                 Intent intent = new Intent(view.getContext(), NoteWidgetActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.ll_ruler:
-                Intent intent2 = new Intent(view.getContext(), RulerActivity.class);
-                startActivity(intent2);
+            }
+            case R.id.ll_ruler: {
+                Intent intent = new Intent(view.getContext(), RulerActivity.class);
+                startActivity(intent);
                 break;
+            }
+            case R.id.ll_info: {
+                Intent intent = new Intent(view.getContext(), AppInfoActivity.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.ll_empty:
+                AcToastUtil.showShort(getContext(), "空");
                 break;
+            case R.id.ll_wallpaper: {
+                Intent intent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+                intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, new ComponentName(getContext(), LiveWallpaperService.class));
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_map: {
+                Intent intent = new Intent(view.getContext(), MapActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_web: {
+                Intent intent = new Intent(view.getContext(), WebviewActivity.class);
+                String url = "http://www.baidu.com";
+//                String url = "http://typhoon.zjwater.gov.cn/default.aspx";
+                intent.putExtra(WebviewActivity.DATA_URL, url);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_compass: {
+                Intent intent = new Intent(view.getContext(), CompassActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_step: {
+                Intent intent = new Intent(view.getContext(), StepActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_bluetooth: {
+                Intent intent = new Intent(view.getContext(), BluetoothActivity.class);
+                startActivity(intent);
+                break;
+            }
         }
 
     }
@@ -126,4 +161,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         }
     }
+
 }

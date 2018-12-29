@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     /**版本号*/
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     /**版本号*/
     private static final String DB_NAME = "angelsccg.db";
 
@@ -52,14 +52,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         System.out.println("create a database");
-        //创建用户表
-        db.execSQL(NoteDBManager.CREATE_NOTE_TABLE);
+        //创建笔记表
+        db.execSQL(NoteDBManager.CREATE_TABLE);
+        //创建步数表
+        db.execSQL(StepDBManager.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         System.out.println("upgrade a database");
+        if(oldVersion < 2){
+            //创建步数表
+            db.execSQL(StepDBManager.CREATE_TABLE);
+        }
     }
 
 }

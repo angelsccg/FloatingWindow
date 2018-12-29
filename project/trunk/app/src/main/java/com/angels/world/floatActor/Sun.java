@@ -30,14 +30,15 @@ public class Sun extends ActorBase {
     }
     /**次数*/
     private int times = 0;
+    private Rect rectsrc,rectFdst;
     //绘图操作
     @Override
     protected void draw(Canvas mCanvas) {
         // 指定图片绘制区域
-        Rect rectsrc = new Rect(0,0,bitmaps[position].getWidth(),bitmaps[position].getHeight());
+        rectsrc = new Rect(0,0,bitmaps[position].getWidth(),bitmaps[position].getHeight());
         // 指定图片在屏幕上显示的区域
         int pointX = surfaceView.getWidth() - bitmaps[position].getWidth();
-        Rect rectFdst = new Rect(pointX,0,bitmaps[position].getWidth() + pointX,bitmaps[position].getHeight());
+        rectFdst = new Rect(pointX,0,bitmaps[position].getWidth() + pointX,bitmaps[position].getHeight());
         mCanvas.drawBitmap(bitmaps[position],rectsrc,rectFdst,null);
         int a = ++times%(ANIM_TIME/FloatSurfaceView.TIME_IN_FRAME);
         if(a == 0){

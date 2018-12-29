@@ -2,15 +2,20 @@ package com.angels.library.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.angels.library.R;
+
 
 /**
  * Name: CommonTitleView
@@ -34,6 +39,9 @@ public class AcCustomTitleLayout extends RelativeLayout {
     private TextView tvTitle;
     /**标题容器*/
     private RelativeLayout rlContainer;
+    /**加载（菊花状）*/
+    private ProgressBar progress;
+
 
 
     public AcCustomTitleLayout(Context context) {
@@ -51,13 +59,22 @@ public class AcCustomTitleLayout extends RelativeLayout {
 
     private void iniView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.ac_part_custom_title, this, true);
-        tvLeft =  view.findViewById(R.id.tv_left);
-        tvTitle =  view.findViewById(R.id.tv_content);
-        ivRight =  view.findViewById(R.id.iv_right);
-        tvRight =  view.findViewById(R.id.tv_right);
-        llRight = view.findViewById(R.id.ll_right);
-        ivLeft = view.findViewById(R.id.iv_left);
-        rlContainer = view.findViewById(R.id.rl_container);
+        tvLeft = (TextView) view.findViewById(R.id.tv_left);
+        tvTitle = (TextView) view.findViewById(R.id.tv_content);
+        ivRight = (ImageView) view.findViewById(R.id.iv_right);
+        tvRight = (TextView) view.findViewById(R.id.tv_right);
+        llRight = (LinearLayout) view.findViewById(R.id.ll_right);
+        ivLeft = (ImageView) view.findViewById(R.id.iv_left);
+        rlContainer = (RelativeLayout) view.findViewById(R.id.rl_container);
+
+        progress = (ProgressBar) view.findViewById(R.id.progress);
+    }
+
+    public void setRightProgress(int visibility){
+        progress.setVisibility(visibility);
+    }
+    public void setRightProgressClick(OnClickListener onClickListener){
+        progress.setOnClickListener(onClickListener);
     }
 
     public void setTitle(String title){

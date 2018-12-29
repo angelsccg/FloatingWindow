@@ -9,22 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <include layout="@layout/part_home_menu"/>
-    <Button
-        android:id="@+id/btn01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="地图"/>
-    <Button
-        android:id="@+id/btn02"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="网页"/>
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="按时大大三大大大大是/n asd asd asd as sad "
+        android:text="2333333333333333333"
         android:layout_alignParentBottom="true"
         android:layout_weight="1"/>
 
