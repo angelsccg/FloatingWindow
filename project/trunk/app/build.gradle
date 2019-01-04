@@ -91,6 +91,9 @@ dependencies {
     //友盟统计
     implementation 'com.umeng.sdk:common:latest.integration'
     implementation 'com.umeng.sdk:analytics:latest.integration'
+    implementation files('libs/AIUI.jar')
+    implementation files('libs/Msc.jar')
+    implementation files('libs/Sunflower.jar')
 }
 
 

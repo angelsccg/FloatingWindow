@@ -48,9 +48,7 @@ public class VoiceActivity extends BaseActivity implements TextToSpeech.OnInitLi
 
 
         txtText = (TextView) findViewById(R.id.txtText);
-
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -94,15 +92,11 @@ public class VoiceActivity extends BaseActivity implements TextToSpeech.OnInitLi
         switch (requestCode) {
             case RESULT_SPEECH: {
                 if (resultCode == RESULT_OK && null != data) {
-
-                    ArrayList<String> text = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 //                    txtText.setText("");
                     for (String str:text){
                         txtText.setText(txtText.getText().toString() + "\n==========\n" + str);
                     }
-                    start();
-
                 }
                 break;
             }

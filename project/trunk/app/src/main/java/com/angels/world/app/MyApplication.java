@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.angels.world.R;
 import com.angels.library.utils.AcLogUtil;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
@@ -42,6 +44,10 @@ public class MyApplication extends Application{
                 "492fcef23a88159ddc4939013af851bb");
         //PushSDK初始化(如使用推送SDK，必须调用此方法)
         initUpush();
+
+        // ======================讯飞====================================
+        // 讯飞初始化
+        SpeechUtility speechUtility = SpeechUtility.createUtility(this, SpeechConstant.APPID +"=5c2c18be");
     }
     synchronized public static MyApplication getApplication() {
         return myApp;

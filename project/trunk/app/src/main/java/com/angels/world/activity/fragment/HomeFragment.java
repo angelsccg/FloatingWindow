@@ -22,6 +22,7 @@ import com.angels.world.activity.MapActivity;
 import com.angels.world.activity.RulerActivity;
 import com.angels.world.activity.StepActivity;
 import com.angels.world.activity.VoiceActivity;
+import com.angels.world.activity.VoiceXFActivity;
 import com.angels.world.activity.WebviewActivity;
 import com.angels.world.activity.launcher.NoteWidgetActivity;
 import com.angels.world.service.LiveWallpaperService;
@@ -34,7 +35,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**标题栏*/
     private AcCustomTitleLayout titleLayout;
     /**菜单*/
-    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice;
+    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice,llVoiceXf;
     private  View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         llStep = view.findViewById(R.id.ll_step);
         llBluetooth = view.findViewById(R.id.ll_bluetooth);
         llVoice = view.findViewById(R.id.ll_voice);
+        llVoiceXf = view.findViewById(R.id.ll_voice_xf);
         llPet.setOnClickListener(this);
         llNote.setOnClickListener(this);
         llRuler.setOnClickListener(this);
@@ -77,6 +79,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         llStep.setOnClickListener(this);
         llBluetooth.setOnClickListener(this);
         llVoice.setOnClickListener(this);
+        llVoiceXf.setOnClickListener(this);
     }
 
     private void initTitleView(View view) {
@@ -154,6 +157,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
             case R.id.ll_voice: {
                 Intent intent = new Intent(view.getContext(), VoiceActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_voice_xf: {
+                Intent intent = new Intent(view.getContext(), VoiceXFActivity.class);
                 startActivity(intent);
                 break;
             }
