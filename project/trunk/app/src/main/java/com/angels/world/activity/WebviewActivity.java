@@ -1,6 +1,7 @@
 package com.angels.world.activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ public class WebviewActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_webview);
         initIntent();
         initView();
@@ -103,6 +103,23 @@ public class WebviewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+    }
+
+//    private void back(){
+//        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
+//            webView.goBack();//返回上个页面
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);//退出H5界面
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && webview.getWebView().canGoBack()) {
+            webview.getWebView().goBack();//返回上个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);//退出H5界面
     }
 
 }

@@ -10,7 +10,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 
 import com.angels.library.utils.AcLogUtil;
-import com.angels.library.utils.HexStringUtils;
+import com.angels.library.utils.AcHexStringUtils;
 import com.angels.world.bluetooth.drive.DeviceCommandConstant;
 import com.angels.world.constant.BluetoothStateConstant;
 
@@ -93,7 +93,7 @@ public class DeviceGattCommon extends GattCommon {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     byte[] data = characteristic.getValue();
                     gattListener.read(data);
-                    AcLogUtil.i( "蓝牙-->读取结果onCharacteristicRead UUID : " + status + "--" + characteristic.getUuid()+"----"+ HexStringUtils.bcd2Str16(data) );
+                    AcLogUtil.i( "蓝牙-->读取结果onCharacteristicRead UUID : " + status + "--" + characteristic.getUuid()+"----"+ AcHexStringUtils.bcd2Str16(data) );
                 }
             }
 
@@ -103,7 +103,7 @@ public class DeviceGattCommon extends GattCommon {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     byte[] data = characteristic.getValue();
                     gattListener.write(data);
-                    AcLogUtil.i("蓝牙-->onCharacteristicWrite写入结果 uuid:"+characteristic.getUuid() + "---" + status + "---" + HexStringUtils.bcd2Str16(data));
+                    AcLogUtil.i("蓝牙-->onCharacteristicWrite写入结果 uuid:"+characteristic.getUuid() + "---" + status + "---" + AcHexStringUtils.bcd2Str16(data));
                 }
             }
 
@@ -111,7 +111,7 @@ public class DeviceGattCommon extends GattCommon {
             public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                 super.onCharacteristicChanged(gatt, characteristic);
                 byte[] data = characteristic.getValue();
-                AcLogUtil.i("蓝牙-->onCharacteristicChanged 变化了 uuid:"+characteristic.getUuid() +"#####"+ HexStringUtils.bcd2Str16(data));
+                AcLogUtil.i("蓝牙-->onCharacteristicChanged 变化了 uuid:"+characteristic.getUuid() +"#####"+ AcHexStringUtils.bcd2Str16(data));
                 BluetoothGattService service = characteristic.getService();
                 if(gattListener != null){
                     gattListener.receive(data);
@@ -122,14 +122,14 @@ public class DeviceGattCommon extends GattCommon {
             public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
                 super.onDescriptorRead(gatt, descriptor, status);
                 byte[] data = descriptor.getValue();
-                AcLogUtil.i("蓝牙-->onDescriptorRead 读取 uuid:"+ HexStringUtils.bcd2Str16(data) +"----"+status);
+                AcLogUtil.i("蓝牙-->onDescriptorRead 读取 uuid:"+ AcHexStringUtils.bcd2Str16(data) +"----"+status);
             }
 
             @Override
             public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
                 super.onDescriptorWrite(gatt, descriptor, status);
                 byte[] data = descriptor.getValue();
-                AcLogUtil.i("蓝牙-->onDescriptorWrite 写入:"+HexStringUtils.bcd2Str16(data) +"----"+status);
+                AcLogUtil.i("蓝牙-->onDescriptorWrite 写入:"+ AcHexStringUtils.bcd2Str16(data) +"----"+status);
                 BluetoothGattCharacteristic characteristic = descriptor.getCharacteristic();
                 BluetoothGattService service = descriptor.getCharacteristic().getService();
             }
@@ -167,7 +167,7 @@ public class DeviceGattCommon extends GattCommon {
         AcLogUtil.i("蓝牙-->receive-->通知 notification01=" + notification01 );
         dp02.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         boolean resBd02 = bluetoothGatt.writeDescriptor(dp02);
-        AcLogUtil.i("蓝牙-->receive-->descriptors resBd02: " + resBd02  + " ,Value=" + HexStringUtils.bcd2Str16(dp02.getValue()) + ",UUID:" + dp02.getUuid());
+        AcLogUtil.i("蓝牙-->receive-->descriptors resBd02: " + resBd02  + " ,Value=" + AcHexStringUtils.bcd2Str16(dp02.getValue()) + ",UUID:" + dp02.getUuid());
         return resBd02;
     }
     /**发送数据*/
@@ -177,7 +177,7 @@ public class DeviceGattCommon extends GattCommon {
         BluetoothGattCharacteristic characteristicHeart = service01.getCharacteristic(characteristicUuid);
         characteristicHeart.setValue(data);
         boolean res1 = bluetoothGatt.writeCharacteristic(characteristicHeart);//开始写入
-        AcLogUtil.i("蓝牙-->send-->开始发送数据 res1=" + res1 + ",uuid:" + characteristicHeart.getUuid() + "--" + HexStringUtils.bcd2Str16(characteristicHeart.getValue()));
+        AcLogUtil.i("蓝牙-->send-->开始发送数据 res1=" + res1 + ",uuid:" + characteristicHeart.getUuid() + "--" + AcHexStringUtils.bcd2Str16(characteristicHeart.getValue()));
         return res1;
     }
 

@@ -40,7 +40,7 @@ android {
 
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "education.apk"
+                    outputFileName = "world.apk"
                 }
             }
         }
@@ -94,6 +94,10 @@ dependencies {
     implementation files('libs/AIUI.jar')
     implementation files('libs/Msc.jar')
     implementation files('libs/Sunflower.jar')
+
+    compile 'com.github.DymanZy:EasyShow3D:1.2'
+    //https://github.com/leonHua/LFilePicker/blob/master/README_CH.md   文件选择器
+    compile 'com.leon:lfilepickerlibrary:1.8.0'
 }
 
 

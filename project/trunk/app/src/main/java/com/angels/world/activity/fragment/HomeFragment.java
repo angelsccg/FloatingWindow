@@ -18,6 +18,8 @@ import com.angels.world.R;
 import com.angels.world.activity.AppInfoActivity;
 import com.angels.world.activity.BluetoothActivity;
 import com.angels.world.activity.CompassActivity;
+import com.angels.world.activity.D3Activity;
+import com.angels.world.activity.FileActivity;
 import com.angels.world.activity.MapActivity;
 import com.angels.world.activity.RulerActivity;
 import com.angels.world.activity.StepActivity;
@@ -35,7 +37,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**标题栏*/
     private AcCustomTitleLayout titleLayout;
     /**菜单*/
-    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice,llVoiceXf;
+    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice,llVoiceXf,ll3D,llFile,llHtml;
     private  View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         llBluetooth = view.findViewById(R.id.ll_bluetooth);
         llVoice = view.findViewById(R.id.ll_voice);
         llVoiceXf = view.findViewById(R.id.ll_voice_xf);
+        ll3D = view.findViewById(R.id.ll_3d);
+        llFile = view.findViewById(R.id.ll_file);
+        llHtml = view.findViewById(R.id.ll_html);
         llPet.setOnClickListener(this);
         llNote.setOnClickListener(this);
         llRuler.setOnClickListener(this);
@@ -80,6 +85,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         llBluetooth.setOnClickListener(this);
         llVoice.setOnClickListener(this);
         llVoiceXf.setOnClickListener(this);
+        ll3D.setOnClickListener(this);
+        llFile.setOnClickListener(this);
+        llHtml.setOnClickListener(this);
     }
 
     private void initTitleView(View view) {
@@ -136,6 +144,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Intent intent = new Intent(view.getContext(), WebviewActivity.class);
                 String url = "http://www.baidu.com";
 //                String url = "http://typhoon.zjwater.gov.cn/default.aspx";
+//                String url = "file:///android_asset/demo.html";
                 intent.putExtra(WebviewActivity.DATA_URL, url);
                 startActivity(intent);
                 break;
@@ -165,8 +174,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             }
+            case R.id.ll_3d:{
+                Intent intent = new Intent(view.getContext(), D3Activity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_file:{
+                Intent intent = new Intent(view.getContext(), FileActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.ll_html:{
+                Intent intent = new Intent(view.getContext(), WebviewActivity.class);
+                String url = "file:///android_asset/html/menu_list.html";
+//                String url = "http://www.baidu.com";
+//                String url = "http://typhoon.zjwater.gov.cn/default.aspx";
+                intent.putExtra(WebviewActivity.DATA_URL, url);
+                startActivity(intent);
+                break;
+            }
         }
-
     }
 
 

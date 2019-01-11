@@ -17,8 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.angels.library.utils.AcStringUtil;
 import com.angels.library.utils.AcToastUtil;
-import com.angels.library.utils.HexStringUtils;
+import com.angels.library.utils.AcHexStringUtils;
 import com.angels.library.widget.AcCustomDialog;
 import com.angels.library.widget.AcCustomTitleLayout;
 import com.angels.world.R;
@@ -81,19 +82,19 @@ public class BluetoothBleActivity extends BaseActivity implements View.OnClickLi
                     break;
                 case DATA:{
                     byte[] data = (byte[]) msg.obj;
-                    String dataStr = HexStringUtils.bcd2Str16(data);
+                    String dataStr = AcHexStringUtils.bcd2Str16(data);
                     tvData.setText(tvData.getText() + "\n" + dataStr);
                     break;
                 }
                 case WRITE:{
                     byte[] data = (byte[]) msg.obj;
-                    String dataStr = HexStringUtils.bcd2Str16(data);
+                    String dataStr = AcHexStringUtils.bcd2Str16(data);
                     tvWrite.setText(tvWrite.getText() + "\n" + dataStr);
                     break;
                 }
                 case READ:{
                     byte[] data = (byte[]) msg.obj;
-                    String dataStr = HexStringUtils.bcd2Str16(data);
+                    String dataStr = AcHexStringUtils.bcd2Str16(data);
                     tvRead.setText(tvRead.getText() + "\n" + dataStr);
                     break;
                 }
@@ -284,7 +285,7 @@ public class BluetoothBleActivity extends BaseActivity implements View.OnClickLi
                     String sendService = etSendService.getText().toString();
                     String sendCharacteristic = etSendCharacteristic.getText().toString();
                     String sendData = etSendData.getText().toString();
-                    byte[] data = stringToByte(sendData);
+                    byte[] data = AcStringUtil.stringToByte(sendData,",");
                     if(!TextUtils.isEmpty(sendService) && !TextUtils.isEmpty(sendCharacteristic) && data != null && data.length > 0){
                         UUID serviceUUID = UUID.fromString(sendService);
                         UUID characteristicUUID = UUID.fromString(sendCharacteristic);
@@ -381,18 +382,7 @@ public class BluetoothBleActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    private byte[] stringToByte(String str){
-        if(str == null || TextUtils.isEmpty(str)){
-            return null;
-        }
-        String[] strArray = str.replace(" ","").split(",");
-        byte[] data = new byte[strArray.length];
-        for (int i = 0; i < strArray.length; i++) {
-//            data[i] = (byte) Integer.parseInt(strArray[i]);
-            data[i] = Byte.parseByte(strArray[i]);
-        }
-        return data;
-    }
+
 
     @Override
     protected void onDestroy() {

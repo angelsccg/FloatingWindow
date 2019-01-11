@@ -46,7 +46,7 @@
     <string name="device_check">设备检测</string>
     <string name="shrink">收缩压</string>
     <string name="diastole">舒张压</string>
-    <string name="bmp">bmp</string>
+    <string name="bpm">bpm</string>
     <string name="start">开始</string>
     <string name="db">分贝</string>
     <string name="shake">震动</string>
