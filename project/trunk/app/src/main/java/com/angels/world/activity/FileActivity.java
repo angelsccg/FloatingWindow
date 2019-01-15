@@ -13,7 +13,7 @@ import com.angels.world.R;
 
 public class FileActivity extends BaseActivity implements View.OnClickListener{
 
-    public static final String[] btnNames= {"文件查看器","文件批量修改"};
+    public static final String[] btnNames= {"文件查看器","文件批量修改","文件批量压缩"};
     public static final Button[] btns = new Button[btnNames.length];
     private LinearLayout llContent;
     @Override
@@ -47,7 +47,12 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
             }
             break;
             case 1: {
-                Intent intent = new Intent(this, FileChangeActivity.class);
+                Intent intent = new Intent(this, FileChangeNameActivity.class);
+                startActivity(intent);
+            }
+            break;
+            case 2: {
+                Intent intent = new Intent(this, FileCompressImageActivity.class);
                 startActivity(intent);
             }
             break;

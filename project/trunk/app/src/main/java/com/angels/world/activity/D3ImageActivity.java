@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
-import com.angels.library.utils.AcImageUtil;
 import com.angels.world.R;
 
 public class D3ImageActivity extends BaseActivity{
@@ -24,9 +24,10 @@ public class D3ImageActivity extends BaseActivity{
     // 当前图片的编号
     private int scrNum;
     // 图片的总数
-    private static int maxNum = 52;
+//    private static int maxNum = 52;
+
     // 资源图片集合
-    private int[] srcs = new int[] { R.drawable.p1, R.drawable.p2,
+    private int[] srcsCar = { R.drawable.p1, R.drawable.p2,
             R.drawable.p3, R.drawable.p4, R.drawable.p5, R.drawable.p6,
             R.drawable.p7, R.drawable.p8, R.drawable.p9, R.drawable.p10,
             R.drawable.p11, R.drawable.p12, R.drawable.p13, R.drawable.p14,
@@ -41,7 +42,7 @@ public class D3ImageActivity extends BaseActivity{
             R.drawable.p47, R.drawable.p48, R.drawable.p49, R.drawable.p50,
             R.drawable.p51, R.drawable.p52 };
     // 资源图片集合
-    private int[] srcsHome = new int[] { R.drawable.home_1, R.drawable.home_2,
+    private int[] srcsHome = { R.drawable.home_1, R.drawable.home_2,
             R.drawable.home_3, R.drawable.home_4, R.drawable.home_5, R.drawable.home_6,
             R.drawable.home_7, R.drawable.home_8, R.drawable.home_9, R.drawable.home_10,
             R.drawable.home_11, R.drawable.home_12, R.drawable.home_13, R.drawable.home_14,
@@ -57,6 +58,9 @@ public class D3ImageActivity extends BaseActivity{
             R.drawable.home_51, R.drawable.home_52, R.drawable.home_53, R.drawable.home_54};
     /*
             R.drawable.home_55, R.drawable.home_56, R.drawable.home_57, R.drawable.home_58*/
+    private int[][] srcs = {srcsCar, srcsHome};
+    private int position = 0;
+    private Button btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +68,20 @@ public class D3ImageActivity extends BaseActivity{
         setContentView(R.layout.activity_d3_image);
 
         imageView = (ImageView) findViewById(R.id.imageView);
-        bitmap = BitmapFactory.decodeResource(getResources(),
-                srcsHome[0]);
-        bitmap = AcImageUtil.comp(bitmap);
-        imageView.setImageBitmap(bitmap);
+        btnNext = findViewById(R.id.btn_next);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(position == srcs.length - 1){
+                    position = 0;
+                }else {
+                    position ++;
+                }
+                imageView.setImageResource(srcs[position][0]);
+            }
+        });
+//        bitmap = BitmapFactory.decodeResource(getResources(), srcsHome[0]);
+//        imageView.setImageBitmap(bitmap);
         // 初始化当前显示图片编号
         scrNum = 1;
 
@@ -106,14 +120,12 @@ public class D3ImageActivity extends BaseActivity{
     // 向右滑动修改资源
     private void modifySrcR() {
 
-        if (scrNum > maxNum) {
+        if (scrNum > srcs[position].length) {
             scrNum = 1;
         }
-
         if (scrNum > 0) {
             bitmap = BitmapFactory.decodeResource(getResources(),
-                    srcsHome[scrNum - 1]);
-            bitmap = AcImageUtil.comp(bitmap);
+                    srcs[position][scrNum - 1]);
             imageView.setImageBitmap(bitmap);
             scrNum++;
         }
@@ -123,17 +135,13 @@ public class D3ImageActivity extends BaseActivity{
     // 向左滑动修改资源
     private void modifySrcL() {
         if (scrNum <= 0) {
-            scrNum = maxNum;
+            scrNum = srcs[position].length;
         }
 
-        if (scrNum <= maxNum) {
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    srcsHome[scrNum - 1]);
-            bitmap = AcImageUtil.comp(bitmap);
+        if (scrNum <= srcs[position].length) {
+            bitmap = BitmapFactory.decodeResource(getResources(),srcs[position][scrNum - 1]);
             imageView.setImageBitmap(bitmap);
             scrNum--;
         }
     }
-
-
 }

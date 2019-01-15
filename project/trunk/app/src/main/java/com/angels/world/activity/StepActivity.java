@@ -33,7 +33,6 @@ public class StepActivity extends BaseActivity{
             tvStep.setText(""+StepDBManager.query(System.currentTimeMillis()).getStep());
             handler.postDelayed(this, 1000);
         }
-
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {

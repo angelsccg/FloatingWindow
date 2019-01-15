@@ -8,6 +8,7 @@ package com.angels.world.constant;
  */
 
 public class KeyConfig {
+
     /**bluetooth_type*/
     public static final String KEY_BLUETOOTH_TYPE = "bluetooth_type";
     /**spp*/
@@ -16,6 +17,10 @@ public class KeyConfig {
     public static final String KEY_BLUETOOTH_BLE = "ble";
     /**device*/
     public static final String KEY_DEVICE = "device";
+
+
+    public static final int MSG_FROM_CLIENT = 0;
+    public static final int MSG_FROM_SERVER = 1;
 
 
 }

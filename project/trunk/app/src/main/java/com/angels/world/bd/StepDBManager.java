@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.angels.library.utils.AcLogUtil;
 import com.angels.world.app.MyApplication;
 import com.angels.world.mode.Note;
-import com.angels.world.mode.Step;
+import com.angels.world.mode.StepEntity;
 import com.angels.world.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -34,13 +34,15 @@ public class StepDBManager {
 //        if(qUser != null || qUser.getId() != null){
 //            return 1;
 //        }
-        Step step = query(System.currentTimeMillis());
-        if(step == null || step.getStep() == 0){
+        StepEntity stepEntity = query(System.currentTimeMillis());
+        if(stepEntity == null || stepEntity.getStep() == 0){
             return add(stepL);
         }else {
-            return update(step.getStep() + stepL);
+            return update(stepEntity.getStep() + stepL);
         }
     }
+
+
 
     public static long add(long stepL) {
         DatabaseHelper helper = new DatabaseHelper(MyApplication.getApplication());
@@ -117,23 +119,23 @@ public class StepDBManager {
     /**
      * 查询最新一条
      * */
-    public static Step query(long timeL){
+    public static StepEntity query(long timeL){
         if(timeL <= 0){
             return null;
         }
         String timeStr = DateUtil.longToString(timeL,"yyyy-MM-dd");
-        Step step = new Step();
+        StepEntity stepEntity = new StepEntity();
         DatabaseHelper helper = new DatabaseHelper(MyApplication.getApplication());
         SQLiteDatabase db = helper.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME, null, "time=?",new String[] { timeStr }, null, null, null);
         while (cursor.moveToNext()) {
-            step.setTime(cursor.getString(cursor.getColumnIndex("time")));
-            step.setStep(cursor.getLong(cursor.getColumnIndex("step")));
+            stepEntity.setTime(cursor.getString(cursor.getColumnIndex("time")));
+            stepEntity.setStep(cursor.getLong(cursor.getColumnIndex("step")));
         }
         cursor.close();
         db.close();
         helper.close();
-        return step;
+        return stepEntity;
     }
 }

@@ -415,7 +415,7 @@ public class DateUtil {
      *
      *
      * */
-    public static boolean getCurrentNight(){
+    public static boolean isCurrentNight(){
         SimpleDateFormat sdf = new SimpleDateFormat("HH");
         String hour= sdf.format(new Date());
         int k  = Integer.parseInt(hour)  ;

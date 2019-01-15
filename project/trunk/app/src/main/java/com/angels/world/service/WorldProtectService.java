@@ -133,6 +133,15 @@ public class WorldProtectService extends Service {
                 e.printStackTrace();
             }
         }
+        /*
+        * 步数
+        * */
+        boolean isRunStep = AppUtil.isServiceWork(WorldProtectService.this,
+                "com.angels.world.service.StepService");
+        if (isRunStep == false) {
+            Intent intent = new Intent(WorldProtectService.this,StepService.class);
+            startService(intent);
+        }
     }
 
     @Override

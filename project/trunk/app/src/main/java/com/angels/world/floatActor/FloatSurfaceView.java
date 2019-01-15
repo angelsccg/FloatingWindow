@@ -217,7 +217,7 @@ public class FloatSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         mCanvas.drawColor(Color.WHITE);
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
         house.draw(mCanvas);
-        if( DateUtil.getCurrentNight()){
+        if( DateUtil.isCurrentNight()){
             moon.draw(mCanvas);
         }else {
             sun.draw(mCanvas);

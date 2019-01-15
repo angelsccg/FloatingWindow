@@ -96,7 +96,8 @@ public class D3EasyShowActivity extends BaseActivity implements View.OnClickList
 
     private void select(){
         /**
-         * withActivity(Activity activity) 绑定Activity
+         *
+         withActivity(Activity activity) 绑定Activity
          withFragment(Fragment fragment) 绑定Fragment
          withSupportFragment(Fragment supportFragment) 绑定V4包Fragment
          withRequestCode(int requestCode) 设置请求码
@@ -122,7 +123,7 @@ public class D3EasyShowActivity extends BaseActivity implements View.OnClickList
                 .withStartPath("/storage/emulated/0/Download")//指定初始显示路径
                 .withIsGreater(false)//过滤文件大小 小于指定大小的文件
                 .withFileSize(500 * 1024 * 1024)//指定文件大小最大为500K
-                .withChooseMode(false)
+                .withChooseMode(true)
                 .start();
     }
 

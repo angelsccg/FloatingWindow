@@ -1,6 +1,15 @@
 package com.angels.library.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class AcFileUtil {
     /**
@@ -26,7 +35,7 @@ public class AcFileUtil {
             newFilePath = filePath.substring(0, filePath.lastIndexOf("/"))+ "/"  + newFileName + filePath.substring(filePath.lastIndexOf("."));
         }
         File nf = new File(newFilePath);
-        if (!f.exists()) { // 判断需要修改为的文件是否存在（防止文件名冲突）
+        if (!nf.exists()) { // 判断需要修改为的文件是否存在（防止文件名冲突）
             return null;
         }
 
@@ -38,5 +47,68 @@ public class AcFileUtil {
         }
 
         return newFilePath;
+    }
+
+    /**
+     *
+     * @param srcFromPath 源文件路径
+     * @param height
+     * @param width
+     * @return
+     */
+    public static String compressImage(String srcFromPath, float height,float width) {
+        String result = "压缩失败";
+        File f = new File(srcFromPath);
+        if (!f.exists()) { // 判断原文件是否存在
+            result = "原图片不存在";
+            return result;
+        }
+        float hh = height;
+        float ww = width;
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        opts.inJustDecodeBounds = false;
+        int w = opts.outWidth;
+        int h = opts.outHeight;
+        int size = 0;
+        if (w <= ww && h <= hh) {
+            size = 1;
+        } else {
+            double scale = w >= h ? w / ww : h / hh;
+            double log = Math.log(scale) / Math.log(2);
+            double logCeil = Math.ceil(log);
+            size = (int) Math.pow(2, logCeil);
+        }
+        opts.inSampleSize = size;
+        Bitmap bitmap = BitmapFactory.decodeFile(srcFromPath, opts);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        System.out.println(baos.toByteArray().length);
+        while (baos.toByteArray().length > 45 * 1024) {
+            if(quality <= 0 || quality > 100){
+                break;
+            }
+            baos.reset();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            quality -= 20;
+            AcLogUtil.i("文件-->压缩图片-->长度：" + baos.toByteArray().length);
+        }
+        try {
+//            baos.writeTo(new FileOutputStream("/mnt/sdcard/Servyou/photo/buffer/22.jpg"));
+            baos.writeTo(new FileOutputStream(srcFromPath));
+            result = "压缩成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = "压缩失败";
+        } finally {
+            try {
+                baos.flush();
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }

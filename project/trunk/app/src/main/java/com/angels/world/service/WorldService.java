@@ -1,12 +1,16 @@
 package com.angels.world.service;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,7 +41,7 @@ import java.util.List;
 /**
  */
 
-public class WorldService extends Service implements StepSensorBase.StepCallBack{
+public class WorldService extends Service{
 
     public static int screenHeight;
     public static int screenWeight;
@@ -48,13 +52,6 @@ public class WorldService extends Service implements StepSensorBase.StepCallBack
 
     /**容器(房子、太阳、月亮、呼噜)*/
     private FloatSurfaceView floatSurfaceView;
-
-    /**
-     *  // 计步传感器
-     *  */
-    private StepSensorBase stepSensor;
-    /**步数*/
-    private long step;
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -136,49 +133,22 @@ public class WorldService extends Service implements StepSensorBase.StepCallBack
             addWindow();
         }
 
-
-        // 开启计步监听, 分为加速度传感器、或计步传感器
-        stepSensor = new StepSensorPedometer(this, this);
-        if (!stepSensor.registerStep()) {
-            Toast.makeText(this, "计步传传感器不可用！", Toast.LENGTH_SHORT).show();
-            stepSensor = new StepSensorAcceleration(this, this);
-            if (!stepSensor.registerStep()) {
-                Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    //  计步回调
-    @Override
-    public void Step(int stepNum) {
-        step = stepNum;
     }
 
 
     /**
      * 判断Service2是否还在运行，如果不是则启动Service2
      */
-
     private void startService2() {
-
         boolean isRun = AppUtil.isServiceWork(WorldService.this,
-
                 "com.angels.world.service.WorldProtectService");
-
         if (isRun == false) {
-
             try {
-
                 startS2.startService();
-
             } catch (RemoteException e) {
-
                 e.printStackTrace();
-
             }
-
         }
-
     }
 
 
@@ -186,9 +156,8 @@ public class WorldService extends Service implements StepSensorBase.StepCallBack
     @Override
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        playQuick();
         return START_STICKY;
-
     }
 
     @Override
@@ -196,6 +165,15 @@ public class WorldService extends Service implements StepSensorBase.StepCallBack
         return (IBinder) startS2;
     }
 
+    /**/
+    private MediaPlayer quickPlayer;
+    public void playQuick(){
+        if(quickPlayer == null){
+            quickPlayer = MediaPlayer.create(this,R.raw.quick);
+            quickPlayer.setLooping(true);
+            quickPlayer.start();
+        }
+    }
     /**
      * 判断当前界面是否是桌面
      */
@@ -413,7 +391,11 @@ public class WorldService extends Service implements StepSensorBase.StepCallBack
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 注销传感器监听
-        stepSensor.unregisterStep();
+        if (quickPlayer != null) {
+            quickPlayer.stop();
+            quickPlayer.reset();
+            quickPlayer.release();
+            quickPlayer = null;
+        }
     }
 }
