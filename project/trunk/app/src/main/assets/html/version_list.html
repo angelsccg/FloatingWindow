@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>html菜单列表</title>
+
+    <style>
+        .menu{
+            margin-top:0.13rem;
+            margin-bottom: 0.13rem;
+            font-size: 0.14rem;
+            padding-left: 0.17rem;
+            border-bottom: 1px solid #E0E0E0 ;
+            height: 0.65rem;
+            line-height: 0.65rem;
+            padding-right: 0.12rem;
+            background: white;
+        }
+        .menu>a{
+            float: right;
+            padding-right: 0.10rem;
+        }
+
+        html{
+            font-size:100px;
+        }
+
+        body{
+            background: rgb(239,239,239);
+        }
+
+        body{
+            padding:0;
+            margin:0;
+            text-decoration: none;
+        }
+
+</style>
+
+<script>
+		var versions = new Array();
+		/** 
+		 * 获取指定的URL参数值 
+		 * URL:http://www.quwan.com/index?name=tyler 
+		 * 参数：paramName URL参数 
+		 * 调用方法:getParam("name") 
+		 * 返回值:tyler 
+		 */ 
+		function getParam(paramName) { 
+		    paramValue = "", isFound = !1; 
+		    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) { 
+		        arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+		        while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+		    } 
+		    return paramValue == "" && (paramValue = null), paramValue 
+		}
+		function init(){
+		  	xmltext = new XMLHttpRequest;
+		    xmltext.open("GET","../data/xml/app_info.xml",false);
+		  	xmltext.send();
+		    a = xmltext.responseXML;
+		    //document.getElementById("xmlid").innerHTML = a.getElementsByTagName("to")[2].childNodes[0].nodeValue;
+		    x = a.getElementsByTagName("info");
+		    for(i=0;i < x.length;i++)
+		    {
+		      versions[i] = x[i].getElementsByTagName("version")[0].childNodes[0].nodeValue
+		      console.log("world-->"+versions[i]);
+		      document.write("<div class='menu' >");
+		      document.write(versions[i]);
+		      document.write("<a>");
+		      document.write(x[i].getElementsByTagName("time")[0].childNodes[0].nodeValue);
+		      document.write(" >");
+		      document.write("</a>");
+		      document.write("</div>");
+		    }
+	  	}
+      
+	    function toMessagePage(versionPage){
+//	    	urlStr = 'version_info.html?version=' + version;
+	        window.location.href='version_info.html?version=' + versionPage ;
+// 			window.open('version_info.html?version=' + versionPage);
+	    };
+	    
+	    
+	    function click(){
+	    	var btnArray = document.getElementsByClassName('menu');
+	    	console.log("world-->click()1-->"+btnArray.length + "-" + versions);
+		    for (var i = 0; i < btnArray.length; i++) {
+		    	console.log("world-->for-->"+i);
+		    	btnArray[i].i = i;
+		    	btnArray[i].onclick = function () {
+		    		console.log("world-->onclick()-->"+this.i+"--"+versions);
+		    		console.log("world-->onclick()-->"+versions[this.i]);
+		    		toMessagePage(versions[this.i]);
+		        };
+		    }
+	    }
+	   init(); 
+	   
+	   click();
+	</script>
+
+</head>
+
+<body>
+	
+</body>
+</html>

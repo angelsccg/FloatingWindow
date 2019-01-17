@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="NumberProgressBar"><attr format="integer" name="progress"/><attr format="integer" name="max"/><attr format="color" name="progress_unreached_color"/><attr format="color" name="progress_reached_color"/><attr format="dimension" name="progress_reached_bar_height"/><attr format="dimension" name="progress_unreached_bar_height"/><attr format="dimension" name="progress_text_size"/><attr format="color" name="progress_text_color"/><attr format="dimension" name="progress_text_offset"/><attr format="enum" name="progress_text_visibility">
+    <declare-styleable name="NumberProgressBar">
+        <attr format="integer" name="progress"/>
+        <attr format="integer" name="max"/>
+        <attr format="color" name="progress_unreached_color"/>
+        <attr format="color" name="progress_reached_color"/>
+        <attr format="dimension" name="progress_reached_bar_height"/>
+        <attr format="dimension" name="progress_unreached_bar_height"/>
+        <attr format="dimension" name="progress_text_size"/>
+        <attr format="color" name="progress_text_color"/>
+        <attr format="dimension" name="progress_text_offset"/>
+        <attr format="enum" name="progress_text_visibility">
             <enum name="visible" value="0"/>
             <enum name="invisible" value="1"/>
-        </attr></declare-styleable>
+        </attr>
+    </declare-styleable>
     <string name="app_name">library</string>
     <style name="NumberProgressBar_Default">
         <item name="android:layout_height">wrap_content</item>

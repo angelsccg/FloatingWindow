@@ -93,6 +93,10 @@ public class ProgressBarWebView extends LinearLayout {
         // 自适应屏幕大小
 //        webviewSettings.setUseWideViewPort(true);
 //        webviewSettings.setLoadWithOverviewMode(true);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            webviewSettings.setAllowFileAccessFromFileURLs(true);
+        }
         mWebView.setOnLongClickListener(new OnLongClickListener() {
 
             @Override
@@ -115,6 +119,7 @@ public class ProgressBarWebView extends LinearLayout {
 //        });
 
         addView(mWebView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
 
     }
 

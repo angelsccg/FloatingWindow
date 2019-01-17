@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="GB2312"?>
+<app>
+	<info class = "new">
+		<version>2.2.5</version>
+	    <msg>
+	    	1，报告对比中显示报告日期，从而可以区分两个报告&#60;br/&#62;
+			2，血压计错误返回提示消息修改&#60;br/&#62;
+			3，修改首页体征项进入的页面的标题。&#60;br/&#62;
+			4，首页点击用户头像进入的亲友页面增加“关闭”按钮&#60;br/&#62;
+			5，对接新设备：怡成血糖仪（5D-8B型号）、 血压（爱奥乐A66V）、温度计（爱立康AET-R161）&#60;br/&#62;
+			6，修改运动检测界面，部分已连接手环会提示手环未连接的bug
+	    </msg>
+	    <url>http://sz.shinoa.cn:18091/SIZHENIMG/app/file/apk/xinnuo_xn_v2.2.5.apk</url>
+	    <force>0</force>
+	    <time>2019-01-16</time>
+	</info>
+	
+	<info>
+		<version>2.2.1</version>
+	    <msg>
+	    	1，报告对比中显示报告日期，从而可以区分两个报告
+			2，血压计错误返回提示消息修改
+			3，修改首页体征项进入的页面的标题。
+			4，首页点击用户头像进入的亲友页面增加“关闭”按钮
+			5，对接新设备：怡成血糖仪（5D-8B型号）、 血压（爱奥乐A66V）、温度计（爱立康AET-R161）
+			6，修改运动检测界面，部分已连接手环会提示手环未连接的bug
+	    </msg>
+	    <url>http://sz.shinoa.cn:18091/SIZHENIMG/app/file/apk/xinnuo_xn_v2.2.1.apk</url>
+	    <force>0</force>
+	     <time>2019-01-10</time>
+	</info>
+    
+</app>

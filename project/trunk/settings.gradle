@@ -1,1 +1,1 @@
-include ':app', ':angelslibrary',"browse"
+include ':app', ':angelslibrary',"browse","core","desktop"

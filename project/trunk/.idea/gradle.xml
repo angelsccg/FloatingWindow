@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$/angelslibrary" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/browse" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/desktop" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

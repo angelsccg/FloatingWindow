@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+	<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"/>-->
+	<title>json</title>
+
+	<style>
+        .menu{
+            margin-top:0.13rem;
+            margin-bottom: 0.13rem;
+            font-size: 0.14rem;
+            padding-left: 0.17rem;
+            border-bottom: 1px solid #E0E0E0 ;
+            height: 0.65rem;
+            line-height: 0.65rem;
+            padding-right: 0.12rem;
+            background: white;
+        }
+        .menu>a{
+            float: right;
+            padding-right: 0.10rem;
+        }
+
+        html{
+            font-size:100px;
+        }
+
+        body{
+            background: rgb(239,239,239);
+        }
+
+        body{
+            padding:0;
+            margin:0;
+            text-decoration: none;
+        }
+
+</style>
+
+	<script>
+		var versions = new Array();
+		/**
+		 * 获取指定的URL参数值
+		 * URL:http://www.quwan.com/index?name=tyler
+		 * 参数：paramName URL参数
+		 * 调用方法:getParam("name")
+		 * 返回值:tyler
+		 */
+		function getParam(paramName) {
+		    paramValue = "", isFound = !1;
+		    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+		        arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+		        while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+		    }
+		    return paramValue == "" && (paramValue = null), paramValue
+		}
+		function init(){
+		  	xmltext = new XMLHttpRequest;
+		    xmltext.open("GET","../data/json/info.json",false);
+		  	xmltext.send();
+		    var a = xmltext.responseText;
+		    console.log("world-->json-->"+a);
+		    var data = JSON.parse(a);
+		    for(i=0;i < data.length;i++)
+		    {
+		      versions[i] = data[i].version
+		      console.log("world-->"+versions[i]);
+		      document.write("<div class='menu' >");
+		      document.write(versions[i]);
+		      document.write("<a>");
+		      document.write(data[i].time);
+		      document.write(" >");
+		      document.write("</a>");
+		      document.write("</div>");
+		    }
+	  	}
+
+	    function toMessagePage(versionPage){
+//	    	urlStr = 'version_info.html?version=' + version;
+	        window.location.href='version_info.html?version=' + versionPage ;
+// 			window.open('version_info.html?version=' + versionPage);
+	    };
+
+
+	    function click(){
+	    	var btnArray = document.getElementsByClassName('menu');
+	    	console.log("world-->click()1-->"+btnArray.length + "-" + versions);
+		    for (var i = 0; i < btnArray.length; i++) {
+		    	console.log("world-->for-->"+i);
+		    	btnArray[i].i = i;
+		    	btnArray[i].onclick = function () {
+		    		console.log("world-->onclick()-->"+this.i+"--"+versions);
+		    		console.log("world-->onclick()-->"+versions[this.i]);
+		    		toMessagePage(versions[this.i]);
+		        };
+		    }
+	    }
+
+
+	   init();
+
+	   click();
+	</script>
+
+</head>
+
+<body>
+
+<!--<div id="app-1">
+  {{ message }}
+</div>
+<div id="app-2">
+  <span v-bind:title="message">
+    app-2鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+
+
+<script>
+    var app1 = new Vue({
+      el: '#app-1',
+      data: {
+        message: 'app-1-Hello Vue!'
+      }
+    })
+    var app2 = new Vue({
+      el: '#app-2',
+      data: {
+        message: 'app-2-页面加载于 ' + new Date().toLocaleString()
+      }
+    })
+</script>-->
+</body>
+</html>

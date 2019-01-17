@@ -20,6 +20,7 @@ import com.angels.world.activity.BluetoothActivity;
 import com.angels.world.activity.CompassActivity;
 import com.angels.world.activity.D3Activity;
 import com.angels.world.activity.FileActivity;
+import com.angels.world.activity.GameLauncherActivity;
 import com.angels.world.activity.MapActivity;
 import com.angels.world.activity.RulerActivity;
 import com.angels.world.activity.StepActivity;
@@ -37,7 +38,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**标题栏*/
     private AcCustomTitleLayout titleLayout;
     /**菜单*/
-    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice,llVoiceXf,ll3D,llFile,llHtml;
+    private LinearLayout llPet,llNote,llRuler,llInfo,llWallpaper,llMap,llEmpty,llWeb,llCompass,llStep,llBluetooth,llVoice,llVoiceXf,ll3D,llFile,llHtml,llGame;
     private  View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         ll3D = view.findViewById(R.id.ll_3d);
         llFile = view.findViewById(R.id.ll_file);
         llHtml = view.findViewById(R.id.ll_html);
+        llGame = view.findViewById(R.id.ll_game);
         llPet.setOnClickListener(this);
         llNote.setOnClickListener(this);
         llRuler.setOnClickListener(this);
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         ll3D.setOnClickListener(this);
         llFile.setOnClickListener(this);
         llHtml.setOnClickListener(this);
+        llGame.setOnClickListener(this);
     }
 
     private void initTitleView(View view) {
@@ -192,6 +195,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 intent.putExtra(WebviewActivity.DATA_URL, url);
                 startActivity(intent);
                 break;
+            }
+            case R.id.ll_game:{
+                Intent intent = new Intent(view.getContext(), GameLauncherActivity.class);
+                startActivity(intent);
             }
         }
     }
