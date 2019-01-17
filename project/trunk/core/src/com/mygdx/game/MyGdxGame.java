@@ -18,8 +18,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 //		System.out.print("========"+Gdx.files.internal("test.jpg").pathWithoutExtension());
-//		img = new Texture("test.jpg");
-		img = new Texture(Gdx.files.internal("app/src/main/assets/test.jpg"));
+		img = new Texture("test.jpg");
+//		img = new Texture(Gdx.files.internal("app/src/main/assets/test.jpg"));
 
 		screemWidth = Gdx.app.getGraphics().getWidth();
 		screemHeight = Gdx.app.getGraphics().getHeight();
